@@ -1,0 +1,67 @@
+---
+// SEO — renders title, meta description, canonical, Open Graph,
+// Twitter card, and optional JSON-LD blocks.
+
+import { SITE } from '../lib/site';
+
+export interface Props {
+  title: string;
+  description: string;
+  /** Relative path (e.g. '/about') — canonical is built against SITE.url. */
+  path: string;
+  /** Absolute or site-relative image URL. */
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  /** Override OG type; defaults to 'website'. */
+  ogType?: 'website' | 'article';
+  /** JSON-LD objects to embed. Each rendered in its own <script>. */
+  jsonLd?: Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  path,
+  image,
+  imageAlt,
+  noindex = false,
+  ogType = 'website',
+  jsonLd = []
+} = Astro.props;
+
+const canonical = new URL(path, SITE.url).toString();
+const ogImage = image
+  ? image.startsWith('http')
+    ? image
+    : new URL(image, SITE.url).toString()
+  : new URL('/og-default.jpg', SITE.url).toString();
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{noindex && <meta name="robots" content="noindex,nofollow" />}
+
+<!-- Open Graph -->
+<meta property="og:site_name" content={SITE.name} />
+<meta property="og:type" content={ogType} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+{imageAlt && <meta property="og:image:alt" content={imageAlt} />}
+<meta property="og:locale" content="en_AU" />
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+{imageAlt && <meta name="twitter:image:alt" content={imageAlt} />}
+
+<!-- JSON-LD -->
+{jsonLd.map((data) => (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(data)} />
+))}

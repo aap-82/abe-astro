@@ -1,0 +1,91 @@
+---
+import Section from './Section.astro';
+import Container from './Container.astro';
+import Button from './Button.astro';
+
+export type CtaBandVariant = 'brand' | 'dark' | 'light';
+
+export interface Props {
+  headline: string;
+  subhead?: string;
+  primaryCtaLabel: string;
+  primaryCtaHref?: string;
+  secondaryCtaLabel?: string;
+  secondaryCtaHref?: string;
+  variant?: CtaBandVariant;
+  alignment?: 'center' | 'left';
+}
+
+const {
+  headline,
+  subhead,
+  primaryCtaLabel,
+  primaryCtaHref,
+  secondaryCtaLabel,
+  secondaryCtaHref,
+  variant = 'brand',
+  alignment = 'center'
+} = Astro.props;
+
+const surfaceMap = { brand: 'brand', dark: 'inverse', light: 'subtle' } as const;
+const onDark = variant === 'brand' || variant === 'dark';
+---
+
+<Section surface={surfaceMap[variant]} padding="m">
+  <Container width="content">
+    <div class:list={['abe-cta', `abe-cta--${alignment}`]}>
+      <h2 class="abe-cta__headline">{headline}</h2>
+      {subhead && <p class="abe-cta__subhead">{subhead}</p>}
+      <div class="abe-cta__actions">
+        <Button label={primaryCtaLabel} href={primaryCtaHref} size="lg" variant="primary" />
+        {secondaryCtaLabel && (
+          <Button label={secondaryCtaLabel} href={secondaryCtaHref} size="lg" variant="tertiary" />
+        )}
+      </div>
+    </div>
+  </Container>
+</Section>
+
+<style define:vars={{ headlineColor: onDark ? 'var(--text-inverse)' : 'var(--text-body)', subheadColor: onDark ? 'var(--text-inverse)' : 'var(--text-subtle)', subheadOpacity: onDark ? '0.9' : '1' }}>
+  .abe-cta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-24);
+    max-width: 720px;
+  }
+  .abe-cta--center {
+    align-items: center;
+    text-align: center;
+    margin-inline: auto;
+  }
+  .abe-cta--left {
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .abe-cta__headline {
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: var(--headlineColor);
+  }
+
+  .abe-cta__subhead {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 28px;
+    margin: 0;
+    color: var(--subheadColor);
+    opacity: var(--subheadOpacity);
+  }
+
+  .abe-cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-16);
+  }
+  .abe-cta--center .abe-cta__actions { justify-content: center; }
+</style>

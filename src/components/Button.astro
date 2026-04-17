@@ -1,0 +1,162 @@
+---
+// Button — renders as <a> if `href` is set, otherwise <button>.
+// CSS :hover/:active/:focus-visible replaces the Framer useState pattern,
+// so this ships as zero JS.
+
+export type ButtonVariant = 'primary' | 'secondary' | 'tertiary' | 'link';
+export type ButtonSize = 'sm' | 'md' | 'lg';
+
+export interface Props {
+  label: string;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  disabled?: boolean;
+  fullWidth?: boolean;
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  ariaLabel?: string;
+  class?: string;
+  /** Opens links in a new tab and adds rel="noopener noreferrer" */
+  external?: boolean;
+}
+
+const {
+  label,
+  variant = 'primary',
+  size = 'md',
+  disabled = false,
+  fullWidth = false,
+  href,
+  type = 'button',
+  ariaLabel,
+  class: className = '',
+  external = false
+} = Astro.props;
+
+const classes = [
+  'abe-btn',
+  `abe-btn--${variant}`,
+  `abe-btn--${size}`,
+  fullWidth ? 'abe-btn--full' : '',
+  className
+]
+  .filter(Boolean)
+  .join(' ');
+---
+
+{href ? (
+  <a
+    href={disabled ? undefined : href}
+    class={classes}
+    aria-disabled={disabled ? 'true' : undefined}
+    aria-label={ariaLabel}
+    target={external ? '_blank' : undefined}
+    rel={external ? 'noopener noreferrer' : undefined}
+  >
+    {label}
+  </a>
+) : (
+  <button
+    type={type}
+    class={classes}
+    disabled={disabled}
+    aria-label={ariaLabel}
+  >
+    {label}
+  </button>
+)}
+
+<style>
+  .abe-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-8);
+    font-family: var(--font-body);
+    font-weight: 600;
+    border-radius: var(--radius-sm);
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+    transition:
+      background-color var(--duration-fast) var(--ease-standard),
+      color var(--duration-fast) var(--ease-standard),
+      border-color var(--duration-fast) var(--ease-standard),
+      box-shadow var(--duration-fast) var(--ease-standard);
+    outline: none;
+    white-space: nowrap;
+  }
+
+  .abe-btn:focus-visible {
+    box-shadow: var(--elevation-brand-focus);
+  }
+
+  .abe-btn--full { width: 100%; }
+
+  /* Sizes */
+  .abe-btn--sm { height: 36px; padding: 0 var(--space-16); font-size: 14px; line-height: 20px; }
+  .abe-btn--md { height: 48px; padding: 0 var(--space-24); font-size: 16px; line-height: 20px; }
+  .abe-btn--lg { height: 56px; padding: 0 var(--space-32); font-size: 18px; line-height: 24px; }
+
+  /* Primary */
+  .abe-btn--primary {
+    background-color: var(--action-primary);
+    color: var(--text-inverse);
+  }
+  .abe-btn--primary:hover  { background-color: var(--action-primary-hover); }
+  .abe-btn--primary:active { background-color: var(--action-primary-active); }
+  .abe-btn--primary[aria-disabled='true'],
+  .abe-btn--primary:disabled {
+    background-color: var(--action-primary-disabled);
+    color: var(--text-inverse);
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+
+  /* Secondary */
+  .abe-btn--secondary {
+    background-color: var(--action-secondary);
+    color: var(--text-inverse);
+  }
+  .abe-btn--secondary:hover  { background-color: var(--action-secondary-hover); }
+  .abe-btn--secondary:active { background-color: var(--color-neutral-900); }
+  .abe-btn--secondary[aria-disabled='true'],
+  .abe-btn--secondary:disabled {
+    background-color: var(--color-neutral-300);
+    color: var(--text-muted);
+    cursor: not-allowed;
+  }
+
+  /* Tertiary */
+  .abe-btn--tertiary {
+    background-color: transparent;
+    color: var(--text-body);
+    border-color: var(--border-default);
+  }
+  .abe-btn--tertiary:hover  { background-color: var(--action-tertiary-hover); }
+  .abe-btn--tertiary:active { background-color: var(--color-neutral-200); }
+  .abe-btn--tertiary[aria-disabled='true'],
+  .abe-btn--tertiary:disabled {
+    color: var(--text-muted);
+    border-color: var(--border-subtle);
+    cursor: not-allowed;
+  }
+
+  /* Link */
+  .abe-btn--link {
+    height: auto;
+    padding: 0;
+    background: transparent;
+    color: var(--action-primary);
+    border: none;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    border-radius: 0;
+  }
+  .abe-btn--link:hover { color: var(--color-maroon-800); }
+  .abe-btn--link[aria-disabled='true'],
+  .abe-btn--link:disabled {
+    color: var(--text-muted);
+    cursor: not-allowed;
+  }
+</style>

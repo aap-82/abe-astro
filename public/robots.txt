@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Pilot subdomain — hide from indexing until cutover.
+# Delete these two lines when the pilot promotes to production.
+User-agent: *
+Disallow: /
+
+Sitemap: https://abeeducation.edu.au/sitemap-index.xml

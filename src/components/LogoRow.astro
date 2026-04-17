@@ -1,0 +1,181 @@
+---
+import Section from './Section.astro';
+import Container from './Container.astro';
+
+import type { SectionSurface } from './Section.astro';
+
+export interface LogoItem {
+  name: string;
+  subtitle?: string;
+  href?: string;
+  imageSrc?: string;
+}
+
+export interface Props {
+  overline?: string;
+  heading?: string;
+  supportingLine?: string;
+  items: LogoItem[];
+  surface?: SectionSurface;
+  alignment?: 'center' | 'left';
+}
+
+const {
+  overline,
+  heading,
+  supportingLine,
+  items,
+  surface = 'page',
+  alignment = 'center'
+} = Astro.props;
+
+const onDark = surface === 'brand' || surface === 'inverse';
+---
+
+<Section surface={surface} padding="m">
+  <Container width="content">
+    <div class:list={['abe-logos', `abe-logos--${alignment}`]}>
+      {(overline || heading || supportingLine) && (
+        <div class="abe-logos__heading">
+          {overline && <span class="abe-logos__overline">{overline}</span>}
+          {heading && <h2 class="abe-logos__title">{heading}</h2>}
+          {supportingLine && <p class="abe-logos__supporting">{supportingLine}</p>}
+        </div>
+      )}
+
+      <ul class="abe-logos__grid" role="list">
+        {items.map((item) => {
+          const tile = item.imageSrc ? (
+            <img
+              src={item.imageSrc}
+              alt={item.name}
+              loading="lazy"
+              decoding="async"
+              class="abe-logos__image"
+            />
+          ) : (
+            <>
+              <span class="abe-logos__name">{item.name}</span>
+              {item.subtitle && <span class="abe-logos__subtitle">{item.subtitle}</span>}
+            </>
+          );
+
+          return (
+            <li class="abe-logos__item">
+              {item.href ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="abe-logos__tile"
+                >
+                  {tile}
+                </a>
+              ) : (
+                <div class="abe-logos__tile">{tile}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </Container>
+</Section>
+
+<style define:vars={{ overlineColor: onDark ? 'var(--text-inverse)' : 'var(--text-brand)', titleColor: onDark ? 'var(--text-inverse)' : 'var(--text-body)', supportColor: onDark ? 'var(--text-inverse)' : 'var(--text-subtle)', supportOpacity: onDark ? '0.9' : '1', nameColor: onDark ? 'var(--text-inverse)' : 'var(--text-body)', subtitleColor: onDark ? 'var(--text-inverse)' : 'var(--text-muted)', subtitleOpacity: onDark ? '0.8' : '1', tileBg: onDark ? 'rgba(255,255,255,0.06)' : 'var(--surface-page)', tileBorder: onDark ? 'rgba(255,255,255,0.25)' : 'var(--border-subtle)' }}>
+  .abe-logos {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-40);
+  }
+  .abe-logos--center { align-items: center; text-align: center; }
+  .abe-logos--left   { align-items: flex-start; text-align: left; }
+
+  .abe-logos__heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    max-width: 720px;
+  }
+  .abe-logos--center .abe-logos__heading { align-items: center; }
+
+  .abe-logos__overline {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--overlineColor);
+  }
+  .abe-logos__title {
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: var(--titleColor);
+  }
+  .abe-logos__supporting {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 28px;
+    margin: 0;
+    color: var(--supportColor);
+    opacity: var(--supportOpacity);
+  }
+
+  .abe-logos__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-16);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .abe-logos--center .abe-logos__grid { justify-content: center; }
+
+  .abe-logos__item { margin: 0; }
+
+  .abe-logos__tile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-4);
+    min-width: 160px;
+    min-height: 80px;
+    padding: var(--space-16) var(--space-24);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--tileBorder);
+    background: var(--tileBg);
+    text-decoration: none;
+  }
+
+  .abe-logos__name {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 700;
+    letter-spacing: -0.005em;
+    color: var(--nameColor);
+  }
+  .abe-logos__subtitle {
+    font-family: var(--font-body);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    color: var(--subtitleColor);
+    opacity: var(--subtitleOpacity);
+  }
+
+  .abe-logos__image {
+    max-height: 40px;
+    width: auto;
+    object-fit: contain;
+  }
+</style>

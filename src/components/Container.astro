@@ -1,0 +1,38 @@
+---
+export type ContainerWidth = 'narrow' | 'content' | 'wide' | 'form' | 'full';
+
+export interface Props {
+  width?: ContainerWidth;
+  paddingX?: boolean;
+  as?: string;
+  class?: string;
+}
+
+const {
+  width = 'content',
+  paddingX = true,
+  as: Tag = 'div',
+  class: className = ''
+} = Astro.props;
+---
+
+<Tag class={`abe-container abe-container--${width} ${paddingX ? 'abe-container--pad' : ''} ${className}`}>
+  <slot />
+</Tag>
+
+<style>
+  .abe-container {
+    width: 100%;
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+  .abe-container--narrow  { max-width: var(--container-narrow); }
+  .abe-container--content { max-width: var(--container-content); }
+  .abe-container--wide    { max-width: var(--container-wide); }
+  .abe-container--form    { max-width: var(--container-form); }
+  .abe-container--full    { max-width: 100%; }
+
+  .abe-container--pad {
+    padding-inline: clamp(var(--gutter-mobile), 4vw, var(--gutter-desktop));
+  }
+</style>

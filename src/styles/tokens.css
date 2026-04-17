@@ -1,0 +1,190 @@
+/* ============================================================
+   ABE Education — Design Tokens
+   Source: Framer Custom Code head (exported 18 April 2026)
+   These tokens are the single source of truth for every visual
+   value in the Astro project. All components read from these
+   CSS custom properties; Tailwind theme extensions reference
+   them by name. Never hard-code hex values or pixel spacing
+   outside this file.
+   ============================================================ */
+
+:root {
+  /* ---------- Spacing scale ---------- */
+  --space-0: 0;
+  --space-4: 4px;
+  --space-8: 8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-40: 40px;
+  --space-48: 48px;
+  --space-64: 64px;
+  --space-80: 80px;
+  --space-96: 96px;
+  --space-128: 128px;
+  --space-160: 160px;
+
+  --space-inline-xs: var(--space-4);
+  --space-inline-s:  var(--space-8);
+  --space-inline-m:  var(--space-12);
+
+  --space-stack-s: var(--space-8);
+  --space-stack-m: var(--space-16);
+  --space-stack-l: var(--space-24);
+
+  --space-section-y-mobile:  var(--space-48);
+  --space-section-y-tablet:  var(--space-64);
+  --space-section-y-desktop: var(--space-96);
+
+  /* ---------- Radius ---------- */
+  --radius-none: 0;
+  --radius-xs:   4px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
+  --radius-full: 9999px;
+
+  /* ---------- Containers & gutters ---------- */
+  --container-content: 1200px;
+  --container-wide:    1440px;
+  --container-narrow:  720px;
+  --container-form:    480px;
+
+  --gutter-mobile:  16px;
+  --gutter-tablet:  24px;
+  --gutter-desktop: 32px;
+
+  /* ---------- Motion ---------- */
+  --duration-instant:    0ms;
+  --duration-fast:       120ms;
+  --duration-base:       200ms;
+  --duration-slow:       320ms;
+  --duration-deliberate: 480ms;
+
+  --ease-standard:   cubic-bezier(0.2, 0, 0,   1);
+  --ease-emphasized: cubic-bezier(0.2, 0, 0,   1.2);
+  --ease-decelerate: cubic-bezier(0,   0, 0.2, 1);
+  --ease-accelerate: cubic-bezier(0.4, 0, 1,   1);
+
+  /* ---------- Brand colour — Maroon ---------- */
+  --color-maroon-50:  #fef5f5;
+  --color-maroon-100: #fde8e8;
+  --color-maroon-200: #f9c9c9;
+  --color-maroon-300: #ef9b9b;
+  --color-maroon-400: #d96666;
+  --color-maroon-500: #b33333;
+  --color-maroon-600: #991a1a;
+  --color-maroon-700: #800000;
+  --color-maroon-800: #660000;
+  --color-maroon-900: #4d0000;
+  --color-maroon-950: #2d0000;
+
+  /* ---------- Neutral ---------- */
+  --color-neutral-0:   #ffffff;
+  --color-neutral-25:  #fafafa;
+  --color-neutral-50:  #f6f6f6;
+  --color-neutral-100: #ededed;
+  --color-neutral-200: #e7e7e7;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a0a0a0;
+  --color-neutral-500: #808080;
+  --color-neutral-600: #606060;
+  --color-neutral-700: #4a4a4a;
+  --color-neutral-800: #2e2e2e;
+  --color-neutral-900: #1a1a1a;
+  --color-neutral-950: #0a0a0a;
+
+  /* ---------- Semantic colour ---------- */
+  --color-success-100: #e0f5ea;
+  --color-success-500: #1f8a4c;
+  --color-success-700: #135c31;
+
+  --color-warning-100: #fdf2e0;
+  --color-warning-500: #c77800;
+  --color-warning-700: #8a5100;
+
+  --color-danger-100: #fde8e8;
+  --color-danger-500: #c53030;
+  --color-danger-700: #821e1e;
+
+  --color-info-100: #e0ecf7;
+  --color-info-500: #2066b3;
+  --color-info-700: #144278;
+
+  /* ---------- Surface roles ---------- */
+  --surface-page:        var(--color-neutral-0);
+  --surface-subtle:      var(--color-neutral-50);
+  --surface-muted:       var(--color-neutral-100);
+  --surface-elevated:    var(--color-neutral-0);
+  --surface-inverse:     var(--color-neutral-900);
+  --surface-brand:       var(--color-maroon-700);
+  --surface-brand-tint:  var(--color-maroon-50);
+
+  /* ---------- Text roles ---------- */
+  --text-body:        var(--color-neutral-900);
+  --text-subtle:      var(--color-neutral-700);
+  --text-muted:       var(--color-neutral-500);
+  --text-placeholder: var(--color-neutral-400);
+  --text-inverse:     var(--color-neutral-0);
+  --text-brand:       var(--color-maroon-700);
+  --text-link:        var(--color-maroon-700);
+  --text-link-hover:  var(--color-maroon-800);
+  --text-success:     var(--color-success-700);
+  --text-warning:     var(--color-warning-700);
+  --text-danger:      var(--color-danger-700);
+  --text-info:        var(--color-info-700);
+
+  /* ---------- Border roles ---------- */
+  --border-subtle:  var(--color-neutral-200);
+  --border-default: var(--color-neutral-300);
+  --border-strong:  var(--color-neutral-500);
+  --border-brand:   var(--color-maroon-700);
+  --border-focus:   var(--color-maroon-700);
+
+  /* ---------- Action colours ---------- */
+  --action-primary:          var(--color-maroon-700);
+  --action-primary-hover:    var(--color-maroon-800);
+  --action-primary-active:   var(--color-maroon-900);
+  --action-primary-disabled: var(--color-maroon-300);
+  --action-secondary:        var(--color-neutral-900);
+  --action-secondary-hover:  var(--color-neutral-800);
+  --action-tertiary:         transparent;
+  --action-tertiary-hover:   var(--color-neutral-100);
+
+  /* ---------- Elevation ---------- */
+  --elevation-0:             none;
+  --elevation-xs:            0 1px 2px  rgba(0, 0, 0, 0.04);
+  --elevation-sm:            0 2px 4px  rgba(0, 0, 0, 0.06);
+  --elevation-md:            0 4px 12px rgba(0, 0, 0, 0.08);
+  --elevation-lg:            0 8px 24px rgba(0, 0, 0, 0.10);
+  --elevation-xl:            0 16px 40px rgba(0, 0, 0, 0.12);
+  --elevation-brand-focus:   0 0 0 4px rgba(128, 0, 0, 0.20);
+
+  /* ---------- Typography ---------- */
+  --font-heading: "Archivo",       system-ui, sans-serif;
+  --font-body:    "DM Sans",       system-ui, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+}
+
+/* ---------- Global animations ---------- */
+@keyframes abe-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------- Reduced-motion preference ---------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast:       0ms;
+    --duration-base:       0ms;
+    --duration-slow:       0ms;
+    --duration-deliberate: 0ms;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

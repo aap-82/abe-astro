@@ -1,0 +1,144 @@
+---
+import Section from './Section.astro';
+import Container from './Container.astro';
+
+import type { SectionSurface } from './Section.astro';
+
+export interface StatItem {
+  value: string;
+  label: string;
+  caption?: string;
+}
+
+export interface Props {
+  overline?: string;
+  heading?: string;
+  items: StatItem[];
+  surface?: SectionSurface;
+  alignment?: 'center' | 'left';
+}
+
+const {
+  overline,
+  heading,
+  items,
+  surface = 'subtle',
+  alignment = 'center'
+} = Astro.props;
+
+const onDark = surface === 'brand' || surface === 'inverse';
+---
+
+<Section surface={surface} padding="m">
+  <Container width="content">
+    <div class:list={['abe-stats', `abe-stats--${alignment}`]}>
+      {(overline || heading) && (
+        <div class="abe-stats__heading">
+          {overline && <span class="abe-stats__overline">{overline}</span>}
+          {heading && <h2 class="abe-stats__title">{heading}</h2>}
+        </div>
+      )}
+
+      <dl class="abe-stats__grid">
+        {items.map((item) => (
+          <div class="abe-stats__item">
+            <dt class="abe-stats__value">{item.value}</dt>
+            <dd class="abe-stats__label">{item.label}</dd>
+            {item.caption && <dd class="abe-stats__caption">{item.caption}</dd>}
+          </div>
+        ))}
+      </dl>
+    </div>
+  </Container>
+</Section>
+
+<style define:vars={{ overlineColor: onDark ? 'var(--text-inverse)' : 'var(--text-brand)', titleColor: onDark ? 'var(--text-inverse)' : 'var(--text-body)', valueColor: onDark ? 'var(--text-inverse)' : 'var(--text-brand)', labelColor: onDark ? 'var(--text-inverse)' : 'var(--text-body)', captionColor: onDark ? 'var(--text-inverse)' : 'var(--text-muted)', captionOpacity: onDark ? '0.85' : '1' }}>
+  .abe-stats {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-48);
+  }
+  .abe-stats--center { align-items: center; text-align: center; }
+  .abe-stats--left   { align-items: flex-start; text-align: left; }
+
+  .abe-stats__heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-16);
+    max-width: 720px;
+  }
+  .abe-stats--center .abe-stats__heading { align-items: center; }
+
+  .abe-stats__overline {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--overlineColor);
+  }
+
+  .abe-stats__title {
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 4vw, 40px);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0;
+    color: var(--titleColor);
+  }
+
+  .abe-stats__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-32);
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  @media (min-width: 640px) {
+    .abe-stats__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (min-width: 960px) {
+    .abe-stats__grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+  }
+
+  .abe-stats__item {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    margin: 0;
+  }
+  .abe-stats--center .abe-stats__item { align-items: center; }
+
+  .abe-stats__value {
+    font-family: var(--font-heading);
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 1.05;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--valueColor);
+    margin: 0;
+  }
+
+  .abe-stats__label {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: 600;
+    color: var(--labelColor);
+    margin: 0;
+  }
+
+  .abe-stats__caption {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 400;
+    color: var(--captionColor);
+    opacity: var(--captionOpacity);
+    margin: 0;
+  }
+</style>

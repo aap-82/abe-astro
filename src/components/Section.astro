@@ -1,0 +1,60 @@
+---
+// Section — provides a surface (background + text colour pairing) and
+// responsive vertical padding. CSS media query replaces the Framer
+// useEffect + matchMedia pattern, so this ships as zero JS.
+
+export type SectionSurface = 'page' | 'subtle' | 'inverse' | 'brand' | 'brand-tint';
+export type SectionPadding = 's' | 'm' | 'l';
+
+export interface Props {
+  surface?: SectionSurface;
+  padding?: SectionPadding;
+  id?: string;
+  class?: string;
+  as?: string;
+}
+
+const {
+  surface = 'page',
+  padding = 'm',
+  id,
+  class: className = '',
+  as: Tag = 'section'
+} = Astro.props;
+---
+
+<Tag
+  id={id}
+  class={`abe-section abe-section--${surface} abe-section--pad-${padding} ${className}`}
+>
+  <slot />
+</Tag>
+
+<style>
+  .abe-section {
+    width: 100%;
+  }
+
+  .abe-section--page        { background: var(--surface-page);       color: var(--text-body); }
+  .abe-section--subtle      { background: var(--surface-subtle);     color: var(--text-body); }
+  .abe-section--inverse     { background: var(--surface-inverse);    color: var(--text-inverse); }
+  .abe-section--brand       { background: var(--surface-brand);      color: var(--text-inverse); }
+  .abe-section--brand-tint  { background: var(--surface-brand-tint); color: var(--text-body); }
+
+  /* Mobile-first vertical padding, scales up via min-width. */
+  .abe-section--pad-s { padding-block: var(--space-32); }
+  .abe-section--pad-m { padding-block: var(--space-48); }
+  .abe-section--pad-l { padding-block: var(--space-64); }
+
+  @media (min-width: 810px) {
+    .abe-section--pad-s { padding-block: var(--space-48); }
+    .abe-section--pad-m { padding-block: var(--space-96); }
+    .abe-section--pad-l { padding-block: var(--space-128); }
+  }
+
+  /* Inverse surfaces need lighter link + heading colour inside. */
+  .abe-section--inverse :global(a),
+  .abe-section--brand   :global(a) {
+    color: var(--text-inverse);
+  }
+</style>

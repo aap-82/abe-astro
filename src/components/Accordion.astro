@@ -1,0 +1,124 @@
+---
+// Accordion — uses the native <details>/<summary> element so no JS is
+// required. This gives us keyboard accessibility, screen reader support,
+// and SEO-visible content for free. `mode="single"` is implemented via
+// the `name` attribute (HTML exclusive-details, supported in all
+// evergreen browsers since 2024).
+
+export interface AccordionItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  items: AccordionItem[];
+  mode?: 'single' | 'multi';
+  variant?: 'bordered' | 'plain';
+  /** HTML `id` base — used to scope the exclusive group. */
+  id?: string;
+}
+
+const {
+  items,
+  mode = 'multi',
+  variant = 'bordered',
+  id = 'abe-acc'
+} = Astro.props;
+---
+
+<div class={`abe-acc abe-acc--${variant}`} role="region">
+  {items.map((item) => (
+    <details
+      class="abe-acc__item"
+      name={mode === 'single' ? id : undefined}
+    >
+      <summary class="abe-acc__trigger">
+        <span class="abe-acc__question">{item.question}</span>
+        <svg
+          class="abe-acc__chevron"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
+          aria-hidden="true"
+        >
+          <path
+            d="M5 7.5L10 12.5L15 7.5"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+        </svg>
+      </summary>
+      <div class="abe-acc__panel">
+        <p>{item.answer}</p>
+      </div>
+    </details>
+  ))}
+</div>
+
+<style>
+  .abe-acc {
+    width: 100%;
+    overflow: hidden;
+    background: var(--surface-page);
+  }
+  .abe-acc--bordered {
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .abe-acc__item {
+    border-top: 1px solid var(--border-subtle);
+  }
+  .abe-acc__item:first-child { border-top: none; }
+
+  .abe-acc__trigger {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
+    padding: var(--space-24);
+    cursor: pointer;
+    list-style: none;
+    font-family: var(--font-heading);
+    font-size: 18px;
+    line-height: 28px;
+    font-weight: 600;
+    color: var(--text-body);
+    transition: background-color var(--duration-fast) var(--ease-standard);
+  }
+  .abe-acc__trigger::-webkit-details-marker { display: none; }
+
+  .abe-acc__trigger:hover {
+    background-color: var(--surface-subtle);
+  }
+  .abe-acc__trigger:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: -2px;
+  }
+
+  .abe-acc__question {
+    flex: 1;
+    text-align: left;
+  }
+
+  .abe-acc__chevron {
+    flex: 0 0 20px;
+    color: var(--text-brand);
+    transition: transform var(--duration-base) var(--ease-standard);
+  }
+  .abe-acc__item[open] .abe-acc__chevron {
+    transform: rotate(180deg);
+  }
+
+  .abe-acc__panel {
+    padding: 0 var(--space-24) var(--space-24);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-subtle);
+  }
+  .abe-acc__panel p { margin: 0; }
+</style>

@@ -1,0 +1,53 @@
+/* ============================================================
+   ABE Education — Self-hosted font faces
+   Files live in /public/fonts/ and are served from the same
+   origin as the HTML (no external DNS, no Google Fonts hit).
+   Preload the critical ones in BaseLayout.astro.
+   ============================================================ */
+
+/* Archivo — headings. Variable weight 100–900, width pinned to 100.
+   Subsetted to Latin + common punctuation — 39 KB gzipped. */
+@font-face {
+  font-family: 'Archivo';
+  src: url('/fonts/archivo-latin.woff2') format('woff2-variations'),
+       url('/fonts/archivo-latin.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0020-007F,     /* Basic Latin */
+    U+00A0-00FF,     /* Latin-1 Supplement */
+    U+0100-017F,     /* Latin Extended A */
+    U+2013-2014,     /* en dash, em dash */
+    U+2018-201D,     /* smart quotes */
+    U+2022,          /* bullet */
+    U+2026,          /* ellipsis */
+    U+2039-203A,     /* single guillemets */
+    U+20AC,          /* euro */
+    U+2122;          /* trademark */
+}
+
+/* DM Sans — body. Variable weight 100–1000, optical size 9–40.
+   Replace with the subsetted file once uploaded — same unicode-range. */
+@font-face {
+  font-family: 'DM Sans';
+  src: url('/fonts/dmsans-latin.woff2') format('woff2-variations'),
+       url('/fonts/dmsans-latin.woff2') format('woff2');
+  font-weight: 100 1000;
+  font-style: normal;
+  font-display: swap;
+  unicode-range:
+    U+0020-007F,
+    U+00A0-00FF,
+    U+0100-017F,
+    U+2013-2014,
+    U+2018-201D,
+    U+2022,
+    U+2026,
+    U+2039-203A,
+    U+20AC,
+    U+2122;
+}
+
+/* JetBrains Mono — only used for inline code snippets in MDX.
+   Keep as system-ui-monospace fallback until a use case appears. */

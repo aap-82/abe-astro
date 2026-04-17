@@ -1,0 +1,33 @@
+---
+// Temporary pilot landing — redirects visitors to /about while the pilot
+// runs on a preview subdomain. Replace with the full home page when the
+// migration expands beyond /about.
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout
+  title="ABE Education — Astro pilot"
+  description="ABE Education Astro pilot build. Visit /about for the active pilot page."
+  path="/"
+  noindex={true}
+>
+  <Section surface="page" padding="l">
+    <Container width="narrow">
+      <h1 style="font-family: var(--font-heading); font-weight: 700;">
+        ABE Education — Astro pilot
+      </h1>
+      <p style="margin-top: var(--space-16); color: var(--text-subtle);">
+        This build is the Astro pilot for <code>/about</code>. Production traffic
+        still serves from the Framer site at
+        <a href="https://abeeducation.edu.au">abeeducation.edu.au</a>.
+      </p>
+      <div style="margin-top: var(--space-24);">
+        <Button label="View the pilot /about page" href="/about" size="lg" />
+      </div>
+    </Container>
+  </Section>
+</BaseLayout>

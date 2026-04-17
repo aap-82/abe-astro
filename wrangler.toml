@@ -1,0 +1,15 @@
+# Wrangler config for the ABE Astro marketing site.
+# Cloudflare Pages reads `name`, `pages_build_output_dir`, and `compatibility_date`.
+# Everything else is local-dev only (wrangler pages dev).
+
+name = "abe-astro"
+compatibility_date = "2026-04-18"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "./dist"
+
+[observability]
+enabled = true
+
+# No bindings required for the /about pilot. KV, R2, D1, and env vars can be
+# added under [[kv_namespaces]], [[r2_buckets]], [[d1_databases]], or [vars]
+# when we start migrating course pages that need dynamic data.

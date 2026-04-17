@@ -1,0 +1,89 @@
+---
+// BaseLayout — sole <html>/<head>/<body> wrapper for the site.
+// Preloads the two self-hosted fonts and pulls in global styles.
+
+import '../styles/global.css';
+import SEO from '../components/SEO.astro';
+import { educationalOrgSchema } from '../lib/schema';
+
+export interface Props {
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+  imageAlt?: string;
+  noindex?: boolean;
+  ogType?: 'website' | 'article';
+  /** Additional JSON-LD blocks for this page, appended to the site-wide org schema. */
+  jsonLd?: Record<string, unknown>[];
+  /** Skip the site-wide EducationalOrganization schema (rare). */
+  skipOrgSchema?: boolean;
+}
+
+const {
+  title,
+  description,
+  path,
+  image,
+  imageAlt,
+  noindex = false,
+  ogType = 'website',
+  jsonLd = [],
+  skipOrgSchema = false
+} = Astro.props;
+
+const allJsonLd = skipOrgSchema ? jsonLd : [educationalOrgSchema(), ...jsonLd];
+---
+
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <!-- Preload critical fonts — variable files, so one preload covers all weights -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/archivo-latin.woff2"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/dmsans-latin.woff2"
+      crossorigin="anonymous"
+    />
+
+    <!-- Favicons -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    <meta name="theme-color" content="#800000" />
+    <meta name="generator" content={Astro.generator} />
+
+    <SEO
+      title={title}
+      description={description}
+      path={path}
+      image={image}
+      imageAlt={imageAlt}
+      noindex={noindex}
+      ogType={ogType}
+      jsonLd={allJsonLd}
+    />
+
+    <slot name="head" />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to main content</a>
+    <slot name="header" />
+    <main id="main">
+      <slot />
+    </main>
+    <slot name="footer" />
+  </body>
+</html>

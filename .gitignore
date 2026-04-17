@@ -1,0 +1,44 @@
+# build output
+dist/
+.astro/
+.output/
+
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# cloudflare
+.wrangler/
+.dev.vars
+.cf
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+
+# macOS / Windows
+.DS_Store
+Thumbs.db
+
+# cache
+.cache/
+.parcel-cache/
+.turbo/
+
+# lock files kept — so Cloudflare Pages builds deterministically
+# (package-lock.json is committed)

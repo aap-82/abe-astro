@@ -1,0 +1,264 @@
+---
+import { getEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/Section.astro';
+import Container from '../components/Container.astro';
+import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
+import LogoRow from '../components/LogoRow.astro';
+import Accordion from '../components/Accordion.astro';
+import CTABand from '../components/CTABand.astro';
+
+import {
+  breadcrumbSchema,
+  faqSchema,
+  webPageSchema
+} from '../lib/schema';
+import { SITE } from '../lib/site';
+
+const entry = await getEntry('pages', 'about');
+if (!entry) throw new Error('Content entry pages/about.mdx not found');
+
+const { data } = entry;
+const { Content } = await entry.render();
+
+// Format the update date for the breadcrumb bar (Australian format)
+const updated = new Date(data.lastUpdated).toLocaleDateString('en-AU', {
+  year: 'numeric',
+  month: 'long'
+});
+
+// Build JSON-LD for this page
+const pageJsonLd = [
+  breadcrumbSchema(data.breadcrumb),
+  webPageSchema({
+    url: `${SITE.url}/about`,
+    name: data.metaTitle,
+    description: data.metaDescription,
+    dateModified: data.lastUpdated
+  }),
+  ...(data.faq ? [faqSchema(data.faq.items)] : [])
+];
+---
+
+<BaseLayout
+  title={data.metaTitle}
+  description={data.metaDescription}
+  path="/about"
+  image={data.ogImage}
+  noindex={data.noindex}
+  jsonLd={pageJsonLd}
+>
+  <!-- Breadcrumb bar -->
+  <Section surface="subtle" padding="s" class="abe-breadcrumb">
+    <Container width="content">
+      <nav aria-label="Breadcrumb" class="abe-breadcrumb__nav">
+        <ol class="abe-breadcrumb__list">
+          {data.breadcrumb.map((crumb, i) => (
+            <li class="abe-breadcrumb__item">
+              {i < data.breadcrumb.length - 1 ? (
+                <a href={crumb.url}>{crumb.name}</a>
+              ) : (
+                <span aria-current="page">{crumb.name}</span>
+              )}
+              {i < data.breadcrumb.length - 1 && <span class="abe-breadcrumb__sep"> › </span>}
+            </li>
+          ))}
+        </ol>
+        <span class="abe-breadcrumb__updated">Last updated: {updated}</span>
+      </nav>
+    </Container>
+  </Section>
+
+  <!-- Trust bar -->
+  {data.trustBar && (
+    <Section surface="brand-tint" padding="s" class="abe-trustbar">
+      <Container width="wide">
+        <ul class="abe-trustbar__list" role="list">
+          {data.trustBar.map((item) => (
+            <li class="abe-trustbar__item">{item}</li>
+          ))}
+        </ul>
+      </Container>
+    </Section>
+  )}
+
+  <!-- Hero — H1 comes from MDX data, not hardcoded -->
+  <Hero
+    headline={data.h1}
+    overline={data.hero?.overline}
+    subhead={data.hero?.subhead}
+    primaryCtaLabel={data.hero?.primaryCta?.label}
+    primaryCtaHref={data.hero?.primaryCta?.href}
+    secondaryCtaLabel={data.hero?.secondaryCta?.label}
+    secondaryCtaHref={data.hero?.secondaryCta?.href}
+    imageSrc={data.hero?.imageSrc}
+    imageAlt={data.hero?.imageAlt}
+    variant={data.hero?.imageSrc ? 'primary' : 'minimal'}
+    surface={data.hero?.surface}
+  />
+
+  <!-- Prose body (sections S1-S6 from MDX) -->
+  <Section surface="page" padding="m">
+    <Container width="narrow">
+      <div class="abe-prose">
+        <Content />
+      </div>
+    </Container>
+  </Section>
+
+  <!-- Stats -->
+  {data.stats && (
+    <Stats
+      overline={data.stats.overline}
+      heading={data.stats.heading}
+      items={data.stats.items}
+      surface={data.stats.surface}
+    />
+  )}
+
+  <!-- Regulator / RTO logo row -->
+  {data.logos && (
+    <LogoRow
+      overline={data.logos.overline}
+      heading={data.logos.heading}
+      supportingLine={data.logos.supportingLine}
+      items={data.logos.items}
+      surface={data.logos.surface}
+    />
+  )}
+
+  <!-- FAQ -->
+  {data.faq && (
+    <Section surface="subtle" padding="m">
+      <Container width="narrow">
+        <h2 class="abe-faq__heading">{data.faq.heading}</h2>
+        <Accordion items={data.faq.items} mode="multi" variant="bordered" />
+      </Container>
+    </Section>
+  )}
+
+  <!-- Bottom CTA -->
+  {data.ctaBand && (
+    <CTABand
+      headline={data.ctaBand.headline}
+      subhead={data.ctaBand.subhead}
+      primaryCtaLabel={data.ctaBand.primaryCta.label}
+      primaryCtaHref={data.ctaBand.primaryCta.href}
+      secondaryCtaLabel={data.ctaBand.secondaryCta?.label}
+      secondaryCtaHref={data.ctaBand.secondaryCta?.href}
+      variant={data.ctaBand.variant}
+    />
+  )}
+</BaseLayout>
+
+<style>
+  /* Breadcrumb */
+  .abe-breadcrumb__nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--text-subtle);
+  }
+  .abe-breadcrumb__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .abe-breadcrumb__item { margin: 0; }
+  .abe-breadcrumb__sep {
+    color: var(--text-muted);
+    margin-inline: var(--space-4);
+  }
+  .abe-breadcrumb__updated {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* Trust bar */
+  .abe-trustbar__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--space-16) var(--space-32);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    color: var(--text-body);
+  }
+  .abe-trustbar__item {
+    margin: 0;
+    white-space: nowrap;
+  }
+  .abe-trustbar__item::before {
+    content: '✓';
+    color: var(--color-maroon-700);
+    font-weight: 700;
+    margin-right: var(--space-8);
+  }
+
+  /* Prose */
+  .abe-prose {
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--text-body);
+  }
+  .abe-prose :global(h2) {
+    font-family: var(--font-heading);
+    font-size: clamp(24px, 3vw, 32px);
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: var(--space-48) 0 var(--space-16);
+    padding-top: var(--space-24);
+    border-top: 2px solid var(--color-maroon-700);
+    color: var(--text-body);
+  }
+  .abe-prose :global(h2:first-child) {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+  .abe-prose :global(h3) {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    line-height: 28px;
+    font-weight: 700;
+    margin: var(--space-32) 0 var(--space-12);
+    color: var(--text-body);
+  }
+  .abe-prose :global(p) { margin: 0 0 var(--space-16); }
+  .abe-prose :global(ul),
+  .abe-prose :global(ol) {
+    margin: var(--space-16) 0;
+    padding-left: var(--space-24);
+  }
+  .abe-prose :global(li) {
+    margin-bottom: var(--space-8);
+  }
+  .abe-prose :global(strong) { font-weight: 600; }
+
+  /* FAQ heading */
+  .abe-faq__heading {
+    font-family: var(--font-heading);
+    font-size: clamp(28px, 4vw, 36px);
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--space-32);
+    text-align: center;
+  }
+</style>
