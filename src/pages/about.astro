@@ -8,6 +8,8 @@ import Stats from '../components/Stats.astro';
 import LogoRow from '../components/LogoRow.astro';
 import Accordion from '../components/Accordion.astro';
 import CTABand from '../components/CTABand.astro';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
 
 import {
   breadcrumbSchema,
@@ -49,6 +51,8 @@ const pageJsonLd = [
   noindex={data.noindex}
   jsonLd={pageJsonLd}
 >
+  <SiteHeader slot="header" currentPath="/about" />
+
   <!-- Breadcrumb bar -->
   <Section surface="subtle" padding="s" class="abe-breadcrumb">
     <Container width="content">
@@ -150,6 +154,8 @@ const pageJsonLd = [
       variant={data.ctaBand.variant}
     />
   )}
+
+  <SiteFooter slot="footer" />
 </BaseLayout>
 
 <style>

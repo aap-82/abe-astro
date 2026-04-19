@@ -1,0 +1,209 @@
+---
+// Site header — logo, primary nav, phone CTA, enrol button.
+// Zero JS: mobile menu uses the classic checkbox-hack so we keep the
+// page JS budget untouched. If the user has JS disabled it still works.
+
+import { SITE } from '../lib/site';
+
+export interface Props {
+  /** Current path so we can mark the active link. */
+  currentPath?: string;
+}
+
+const { currentPath = '' } = Astro.props;
+
+const navItems = [
+  { label: 'About', href: '/about' },
+  { label: 'Owner Builder', href: '/owner-builder' },
+  { label: 'CPD', href: '/cpd' },
+  { label: 'White Card', href: '/white-card' },
+  { label: 'Contact', href: '/contact' }
+];
+
+// Strip trailing slash for comparison.
+const normalise = (p: string) => p.replace(/\/$/, '') || '/';
+const active = normalise(currentPath);
+---
+
+<header class="abe-header" role="banner">
+  <div class="abe-header__inner">
+    <a href="/" class="abe-header__logo" aria-label="ABE Education home">
+      <span class="abe-header__logo-text">ABE</span>
+      <span class="abe-header__logo-sub">Education</span>
+    </a>
+
+    <input type="checkbox" id="abe-nav-toggle" class="abe-header__toggle" aria-hidden="true" />
+    <label for="abe-nav-toggle" class="abe-header__burger" aria-label="Toggle menu" aria-controls="abe-nav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+
+    <nav id="abe-nav" class="abe-header__nav" aria-label="Primary">
+      <ul class="abe-header__list">
+        {navItems.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              class="abe-header__link"
+              aria-current={normalise(item.href) === active ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <div class="abe-header__actions">
+        <a href={`tel:${SITE.phone}`} class="abe-header__phone">
+          <span aria-hidden="true">☎</span>
+          <span class="abe-header__phone-label">1300 000 000</span>
+        </a>
+        <a href="/enrol" class="abe-header__cta">Enrol now</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .abe-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-bg-page, #ffffff);
+    border-bottom: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+  }
+
+  .abe-header__inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: var(--space-12, 12px) var(--space-24, 24px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-24, 24px);
+  }
+
+  /* Logo */
+  .abe-header__logo {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    text-decoration: none;
+    font-family: var(--font-heading, 'Archivo', sans-serif);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--color-maroon-700, #800000);
+  }
+  .abe-header__logo-text { font-size: 24px; line-height: 1; }
+  .abe-header__logo-sub {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-subtle, #444);
+  }
+
+  /* Nav */
+  .abe-header__nav {
+    display: flex;
+    align-items: center;
+    gap: var(--space-24, 24px);
+    flex: 1;
+    justify-content: flex-end;
+  }
+  .abe-header__list {
+    display: flex;
+    gap: var(--space-24, 24px);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .abe-header__link {
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--text-body, #1a1a1a);
+    text-decoration: none;
+    padding: 8px 0;
+    border-bottom: 2px solid transparent;
+  }
+  .abe-header__link:hover { color: var(--color-maroon-700, #800000); }
+  .abe-header__link[aria-current='page'] {
+    color: var(--color-maroon-700, #800000);
+    border-bottom-color: var(--color-maroon-700, #800000);
+  }
+
+  /* Actions */
+  .abe-header__actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-16, 16px);
+  }
+  .abe-header__phone {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-maroon-700, #800000);
+    text-decoration: none;
+  }
+  .abe-header__cta {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 18px;
+    background: var(--color-maroon-700, #800000);
+    color: #ffffff;
+    font-family: var(--font-body, 'DM Sans', sans-serif);
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 6px;
+  }
+  .abe-header__cta:hover { background: var(--color-maroon-800, #660000); }
+
+  /* Mobile toggle — hidden visually, controls nav via :checked */
+  .abe-header__toggle { display: none; }
+  .abe-header__burger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 8px;
+  }
+  .abe-header__burger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--text-body, #1a1a1a);
+    border-radius: 1px;
+    transition: transform 0.2s ease;
+  }
+
+  @media (max-width: 900px) {
+    .abe-header__burger { display: flex; }
+    .abe-header__nav {
+      position: absolute;
+      inset: 100% 0 auto 0;
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-16, 16px);
+      padding: var(--space-24, 24px);
+      background: var(--color-bg-page, #ffffff);
+      border-bottom: 1px solid var(--border-subtle, rgba(0, 0, 0, 0.08));
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      display: none;
+    }
+    .abe-header__toggle:checked ~ .abe-header__nav { display: flex; }
+    .abe-header__list {
+      flex-direction: column;
+      gap: var(--space-12, 12px);
+    }
+    .abe-header__actions {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-12, 12px);
+    }
+    .abe-header__cta { justify-content: center; }
+  }
+</style>
