@@ -152,3 +152,18 @@ The numbers meet the <30 KB total-JS target.
 ### Verdict
 **Scaffold builds successfully. Ready to push.**
 Commit SHA (sandbox side): `aff9181fb267f733e802783688aae19e79975796`.
+
+---
+
+## Update: Cloudflare Pages first build — 19 April 2026
+
+First Cloudflare Pages deployment (commit `74c8a91`) failed in the `@astrojs/sitemap` post-build hook with `Cannot read properties of undefined (reading 'reduce')` at `@astrojs/sitemap/dist/index.js:85:37`. Known bug in sitemap 3.2.x when triggered from the `astro:build:done` hook on certain configs. All 26 modules transformed, both static routes emitted cleanly (`/about/index.html` +25ms, `/index.html` +3ms) before the crash.
+
+### Fix applied
+- Removed `@astrojs/sitemap` import and integration from `astro.config.mjs` (comment retained to document the reason).
+- Removed `@astrojs/sitemap` dependency from `package.json`.
+- Regenerated `package-lock.json` so `npm ci` on Cloudflare stays strict.
+- Verified locally: `astro build` now completes through static route generation without error. The pilot ships without a sitemap — we'll add it back (pinned to a known-good version) when the site expands beyond `/about`.
+
+### Next build expected
+Commit pushed to `main` → Cloudflare Pages auto-rebuild → `abe-astro.pages.dev/about` live.
