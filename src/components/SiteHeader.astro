@@ -13,11 +13,8 @@ export interface Props {
 const { currentPath = '' } = Astro.props;
 
 const navItems = [
-  { label: 'About', href: '/about' },
-  { label: 'Owner Builder', href: '/owner-builder' },
-  { label: 'CPD', href: '/cpd' },
-  { label: 'White Card', href: '/white-card' },
-  { label: 'Contact', href: '/contact' }
+  { label: 'Owner Builder WA', href: '/wa-owner-builder-course' },
+  { label: 'About', href: '/about' }
 ];
 
 // Strip trailing slash for comparison.
@@ -59,7 +56,7 @@ const active = normalise(currentPath);
           <span aria-hidden="true">☎</span>
           <span class="abe-header__phone-label">1300 000 000</span>
         </a>
-        <a href="/enrol" class="abe-header__cta">Enrol now</a>
+        <a href="/wa-owner-builder-course#pricing" class="abe-header__cta">Enrol now</a>
       </div>
     </nav>
   </div>
