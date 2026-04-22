@@ -1,0 +1,75 @@
+---
+// AnswerCapsule — short boxed answer with a thick left-border accent.
+// Signature Framer pattern for "the answer in one line" paragraphs that
+// lead into longer prose. Two tones: "light" (maroon border on off-white)
+// and "dark" (gold border on transparent-white, used inside charcoal
+// sections).
+
+export interface Props {
+  /** "light" (default) or "dark". */
+  tone?: 'light' | 'dark';
+  /** Small uppercase label above the answer (e.g. "THE SHORT ANSWER"). */
+  label?: string;
+  /** Optional emoji / icon shown before the label. */
+  icon?: string;
+  class?: string;
+}
+
+const { tone = 'light', label, icon, class: className = '' } = Astro.props;
+const classes = ['abe-capsule', `abe-capsule--${tone}`, className].filter(Boolean).join(' ');
+---
+
+<aside class={classes}>
+  {(label || icon) && (
+    <p class="abe-capsule__label">
+      {icon && <span aria-hidden="true">{icon}</span>}
+      {label}
+    </p>
+  )}
+  <div class="abe-capsule__body">
+    <slot />
+  </div>
+</aside>
+
+<style>
+  .abe-capsule {
+    border-left: 4px solid transparent;
+    padding: var(--space-16) var(--space-24);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-family: var(--font-body);
+  }
+  .abe-capsule__label {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin: 0 0 var(--space-8);
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+  }
+  .abe-capsule__body {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0;
+  }
+  .abe-capsule__body :global(p) { margin: 0; }
+  .abe-capsule__body :global(p + p) { margin-top: var(--space-8); }
+
+  /* Light variant — maroon border on cool-off-white. */
+  .abe-capsule--light {
+    border-left-color: var(--color-maroon-700);
+    background: var(--color-neutral-50);
+    color: var(--text-body);
+  }
+  .abe-capsule--light .abe-capsule__label { color: var(--color-maroon-700); }
+
+  /* Dark variant — gold border on translucent white over dark parent. */
+  .abe-capsule--dark {
+    border-left-color: var(--color-gold-safety);
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+  }
+  .abe-capsule--dark .abe-capsule__label { color: var(--color-gold-safety); }
+</style>

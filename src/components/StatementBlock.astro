@@ -1,0 +1,73 @@
+---
+// StatementBlock — full-bleed charcoal section with a 5fr / 7fr grid.
+// Dark inversion of the intro-grid pattern: gold eyebrow + white H2 on
+// the left, prose + optional dark AnswerCapsule on the right.
+
+import EyebrowLabel from './EyebrowLabel.astro';
+
+export interface Props {
+  eyebrow?: string;
+  title: string;
+  class?: string;
+}
+
+const { eyebrow, title, class: className = '' } = Astro.props;
+const classes = ['abe-statement', className].filter(Boolean).join(' ');
+---
+
+<section class={classes}>
+  <div class="abe-statement__inner">
+    <div class="abe-statement__left">
+      {eyebrow && <EyebrowLabel tone="gold">{eyebrow}</EyebrowLabel>}
+      <h2 class="abe-statement__title">{title}</h2>
+    </div>
+    <div class="abe-statement__right">
+      <slot />
+    </div>
+  </div>
+</section>
+
+<style>
+  .abe-statement {
+    background: var(--color-neutral-900);
+    color: #ffffff;
+    padding: var(--space-80) 0;
+  }
+  .abe-statement__inner {
+    max-width: var(--container-editorial);
+    margin: 0 auto;
+    padding: 0 var(--space-24);
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: var(--space-64);
+  }
+  .abe-statement__left { display: flex; flex-direction: column; gap: var(--space-16); }
+  .abe-statement__title {
+    font-family: var(--font-heading);
+    font-size: 32px;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.3px;
+    color: #ffffff;
+    margin: 0;
+  }
+  .abe-statement__right {
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.85);
+  }
+  .abe-statement__right :global(p) { margin: 0 0 var(--space-16); }
+  .abe-statement__right :global(p:last-child) { margin-bottom: 0; }
+  .abe-statement__right :global(a) {
+    color: var(--color-gold-safety);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  @media (max-width: 900px) {
+    .abe-statement { padding: var(--space-64) 0; }
+    .abe-statement__inner { grid-template-columns: 1fr; gap: var(--space-24); }
+    .abe-statement__title { font-size: 28px; }
+  }
+</style>

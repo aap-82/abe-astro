@@ -1,0 +1,122 @@
+---
+// Breadcrumb — light strip that sits directly under the site header on
+// content pages. Breadcrumb list on the left, optional "Last updated"
+// metadata on the right. Uses a `›` pseudo-element as the separator so
+// screen readers read only the link text.
+//
+// Emits a BreadcrumbList JSON-LD block automatically so the template
+// doesn't also have to emit one.
+
+import { SITE } from '../lib/site';
+
+export interface Crumb {
+  label: string;
+  /** Omit href on the current page. */
+  href?: string;
+}
+
+export interface Props {
+  items: Crumb[];
+  /** ISO date string; rendered as "Last updated DD Mon YYYY". */
+  lastUpdated?: string;
+  /** Emit BreadcrumbList schema. Default true. */
+  schema?: boolean;
+}
+
+const { items, lastUpdated, schema = true } = Astro.props;
+
+const dateLabel = lastUpdated
+  ? new Date(lastUpdated).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })
+  : null;
+
+const graph = schema
+  ? {
+      '@context': 'https://schema.org',
+      '@type':    'BreadcrumbList',
+      itemListElement: items.map((c, i) => ({
+        '@type':    'ListItem',
+        position:   i + 1,
+        name:       c.label,
+        item:       c.href ? `${SITE.url}${c.href}` : undefined
+      }))
+    }
+  : null;
+---
+
+<nav class="abe-breadcrumb" aria-label="Breadcrumb">
+  <div class="abe-breadcrumb__inner">
+    <ol class="abe-breadcrumb__list">
+      {items.map((c, i) => (
+        <li class="abe-breadcrumb__item">
+          {c.href && i < items.length - 1
+            ? <a href={c.href}>{c.label}</a>
+            : <span aria-current="page">{c.label}</span>
+          }
+        </li>
+      ))}
+    </ol>
+    {dateLabel && (
+      <span class="abe-breadcrumb__meta">
+        <span class="abe-breadcrumb__meta-label">Last updated</span>
+        <time datetime={lastUpdated}>{dateLabel}</time>
+      </span>
+    )}
+  </div>
+</nav>
+
+{graph && <script type="application/ld+json" is:inline set:html={JSON.stringify(graph)} />}
+
+<style>
+  .abe-breadcrumb {
+    background: var(--surface-page);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+  .abe-breadcrumb__inner {
+    max-width: var(--container-editorial);
+    margin: 0 auto;
+    padding: var(--space-12) var(--space-24);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-16);
+    flex-wrap: wrap;
+  }
+  .abe-breadcrumb__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text-subtle);
+  }
+  .abe-breadcrumb__item + .abe-breadcrumb__item::before {
+    content: '\203A';
+    color: var(--text-muted);
+    margin-right: var(--space-8);
+  }
+  .abe-breadcrumb__item a {
+    color: var(--text-subtle);
+    text-decoration: none;
+  }
+  .abe-breadcrumb__item a:hover {
+    color: var(--color-maroon-700);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .abe-breadcrumb__item [aria-current='page'] {
+    color: var(--text-body);
+    font-weight: 500;
+  }
+  .abe-breadcrumb__meta {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-muted);
+    display: inline-flex;
+    gap: var(--space-4);
+  }
+  .abe-breadcrumb__meta-label { color: var(--text-muted); }
+  .abe-breadcrumb__meta time  { color: var(--text-subtle); font-weight: 500; }
+</style>

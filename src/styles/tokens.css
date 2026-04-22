@@ -188,3 +188,31 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================
+   Framer reference additions (from /experts page audit, 23 Apr 2026)
+   Gold accents, trust-bar navy, and shadow aliases used by the
+   editorial page treatment ported from the /experts Framer build.
+   ============================================================ */
+:root {
+  /* Gold — used as accent on dark (charcoal / navy) sections.
+     Safety = iconography + eyebrows on dark backgrounds.
+     Premium = body text / link hover on dark. */
+  --color-gold-safety:  #E8B00F;
+  --color-gold-premium: #ca8a04;
+
+  /* Deep navy used only in the trust bar strip. */
+  --color-navy-trust: #0a0a1e;
+
+  /* Amber used by AwardBadge (foreground = warning-800-ish). */
+  --color-amber-100: #fef3c7;
+  --color-amber-800: #92400e;
+
+  /* Framer-named shadow aliases so component CSS can quote the
+     designer's vocabulary directly. */
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-medium: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+
+  /* Content-max alias that matches the Framer 1140 px container. */
+  --container-editorial: 1140px;
+}

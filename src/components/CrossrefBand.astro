@@ -1,0 +1,61 @@
+---
+// CrossrefBand — single-line charcoal strip with short copy and one or
+// two links in gold. Used at the end of a section to redirect readers.
+
+export interface CrossrefLink { label: string; href: string; }
+
+export interface Props {
+  /** Lead-in text, e.g. "Looking for VIC or NSW?" */
+  intro?: string;
+  links?: CrossrefLink[];
+  class?: string;
+}
+
+const { intro, links = [], class: className = '' } = Astro.props;
+const classes = ['abe-crossref', className].filter(Boolean).join(' ');
+---
+
+<aside class={classes}>
+  {intro && <span class="abe-crossref__intro">{intro}</span>}
+  <span class="abe-crossref__links">
+    {links.map((l, i) => (
+      <>
+        {i > 0 && <span class="abe-crossref__sep" aria-hidden="true">·</span>}
+        <a href={l.href} class="abe-crossref__link">{l.label}</a>
+      </>
+    ))}
+    <slot />
+  </span>
+</aside>
+
+<style>
+  .abe-crossref {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-16);
+    padding: var(--space-12) var(--space-24);
+    background: var(--color-neutral-900);
+    color: #ffffff;
+    border-radius: var(--radius-sm);
+    font-family: var(--font-body);
+    font-size: 14px;
+  }
+  .abe-crossref__intro { font-weight: 500; }
+  .abe-crossref__links {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    flex-wrap: wrap;
+  }
+  .abe-crossref__link {
+    color: var(--color-gold-safety);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color var(--duration-fast) var(--ease-standard);
+  }
+  .abe-crossref__link:hover {
+    border-bottom-color: var(--color-gold-safety);
+  }
+  .abe-crossref__sep { color: rgba(255, 255, 255, 0.4); }
+</style>

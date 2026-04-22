@@ -1,0 +1,111 @@
+---
+// ProcessSteps — numbered cards laid out in a 3-up grid with short
+// horizontal connectors between them. Each card: step-tag eyebrow,
+// maroon-pale icon box (56 px square), H3 title, short body.
+// Hover lift on each card.
+
+export interface StepItem {
+  tag:   string;   // "STEP 01"
+  icon?: string;   // emoji or short glyph
+  title: string;
+  body:  string;
+}
+
+export interface Props {
+  items: StepItem[];
+  class?: string;
+}
+
+const { items, class: className = '' } = Astro.props;
+const classes = ['abe-process', className].filter(Boolean).join(' ');
+---
+
+<ol class={classes} aria-label="Our process">
+  {items.map((s, i) => (
+    <li class="abe-process__card">
+      <span class="abe-process__tag">{s.tag}</span>
+      {s.icon && <span class="abe-process__icon" aria-hidden="true">{s.icon}</span>}
+      <h3 class="abe-process__title">{s.title}</h3>
+      <p class="abe-process__body">{s.body}</p>
+      {i < items.length - 1 && <span class="abe-process__connector" aria-hidden="true" />}
+    </li>
+  ))}
+</ol>
+
+<style>
+  .abe-process {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-24);
+  }
+  .abe-process__card {
+    position: relative;
+    background: var(--surface-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: var(--space-32);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+    transition: box-shadow var(--duration-base) var(--ease-standard),
+                transform   var(--duration-base) var(--ease-standard);
+  }
+  .abe-process__card:hover {
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-2px);
+  }
+  .abe-process__tag {
+    font-family: var(--font-heading);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--color-maroon-700);
+  }
+  .abe-process__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    background: var(--surface-brand-tint);
+    color: var(--color-maroon-700);
+    border-radius: var(--radius-sm);
+    font-size: 24px;
+    line-height: 1;
+  }
+  .abe-process__title {
+    font-family: var(--font-heading);
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0;
+    color: var(--text-body);
+  }
+  .abe-process__body {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.7;
+    color: var(--text-subtle);
+    margin: 0;
+  }
+
+  /* Horizontal connector between cards — sits in the gutter to the
+     right of each card except the last. Hidden on stacked layouts. */
+  .abe-process__connector {
+    position: absolute;
+    top: 50%;
+    right: calc(var(--space-24) * -1 - 4px);
+    width: 20px;
+    height: 2px;
+    background: var(--border-default);
+  }
+
+  @media (max-width: 900px) {
+    .abe-process { grid-template-columns: 1fr; gap: var(--space-16); }
+    .abe-process__connector { display: none; }
+  }
+</style>

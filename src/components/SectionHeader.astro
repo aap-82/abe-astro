@@ -1,0 +1,78 @@
+---
+// SectionHeader — centred pill eyebrow + H2 + optional lede.
+// Used above three-up grids (process steps, FAQ, stats).
+// Max-width 720 px per Framer reference.
+
+import EyebrowLabel from './EyebrowLabel.astro';
+
+export interface Props {
+  eyebrow?: string;
+  title:    string;
+  lede?:    string;
+  /** "light" bg (default) or "dark" for charcoal sections. */
+  tone?:    'light' | 'dark';
+  /** H2 visual scale. Default is 34 px. Use "lg" for 44 px editorial. */
+  scale?:   'default' | 'lg';
+  class?:   string;
+}
+
+const {
+  eyebrow,
+  title,
+  lede,
+  tone = 'light',
+  scale = 'default',
+  class: className = ''
+} = Astro.props;
+
+const classes = [
+  'abe-section-header',
+  `abe-section-header--${tone}`,
+  `abe-section-header--${scale}`,
+  className
+].filter(Boolean).join(' ');
+---
+
+<header class={classes}>
+  {eyebrow && (
+    <EyebrowLabel tone={tone === 'dark' ? 'gold' : 'maroon'}>{eyebrow}</EyebrowLabel>
+  )}
+  <h2 class="abe-section-header__title">{title}</h2>
+  {lede && <p class="abe-section-header__lede">{lede}</p>}
+</header>
+
+<style>
+  .abe-section-header {
+    max-width: 720px;
+    margin: 0 auto var(--space-48);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-16);
+  }
+  .abe-section-header__title {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin: 0;
+  }
+  .abe-section-header--default .abe-section-header__title { font-size: 34px; }
+  .abe-section-header--lg      .abe-section-header__title { font-size: 44px; line-height: 1.1; }
+  .abe-section-header__lede {
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 0;
+    color: var(--text-subtle);
+  }
+  .abe-section-header--light .abe-section-header__title { color: var(--text-body); }
+  .abe-section-header--dark  .abe-section-header__title { color: var(--text-inverse); }
+  .abe-section-header--dark  .abe-section-header__lede  { color: rgba(255, 255, 255, 0.8); }
+
+  @media (max-width: 640px) {
+    .abe-section-header--default .abe-section-header__title { font-size: 26px; }
+    .abe-section-header--lg      .abe-section-header__title { font-size: 30px; }
+  }
+</style>

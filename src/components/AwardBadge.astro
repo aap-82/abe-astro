@@ -1,0 +1,34 @@
+---
+// AwardBadge — amber pill used for credential tags on expert cards.
+// Small emoji or glyph on the left, bold short text. Inline flex so
+// several can sit on a single row with wrap.
+
+export interface Props {
+  icon?: string;
+  class?: string;
+}
+
+const { icon = '🏅', class: className = '' } = Astro.props;
+const classes = ['abe-award', className].filter(Boolean).join(' ');
+---
+
+<span class={classes}>
+  <span aria-hidden="true">{icon}</span>
+  <slot />
+</span>
+
+<style>
+  .abe-award {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-8);
+    background: var(--color-amber-100);
+    color: var(--color-amber-800);
+    padding: 4px 12px;
+    border-radius: var(--radius-full);
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+</style>
