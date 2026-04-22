@@ -1,0 +1,239 @@
+---
+// CourseOutline — renders the modules of a course alongside an
+// optional knowledge-area mapping table. Designed for the Owner
+// Builder WA brief (eight modules + Form 75 knowledge-area mapping)
+// but generic enough to drop into any state course page.
+//
+// All content is SSR'd as plain HTML — no JS — so each module
+// title and description is indexable as page text.
+
+export interface CourseModule {
+  /** Module number, e.g. 1. */
+  number: number;
+  title: string;
+  /** Short description of what the module covers. */
+  summary: string;
+  /** Optional duration string, e.g. '25 min'. */
+  duration?: string;
+}
+
+export interface KnowledgeAreaRow {
+  /** Knowledge area name as it appears on the regulator form, e.g. 'Engaging building trades'. */
+  area: string;
+  /** Module(s) that cover this area, e.g. 'Modules 1, 2'. */
+  coveredIn: string;
+}
+
+export interface Props {
+  /** Section heading printed above the modules list. */
+  heading: string;
+  /** Optional intro paragraph. */
+  intro?: string;
+  modules: CourseModule[];
+  /** Optional knowledge-area mapping table — typically the regulator's checklist. */
+  mapping?: {
+    heading: string;
+    sourceLabel: string;
+    rows: KnowledgeAreaRow[];
+  };
+  class?: string;
+}
+
+const { heading, intro, modules, mapping, class: className = '' } = Astro.props;
+const classes = ['abe-course-outline', className].filter(Boolean).join(' ');
+---
+
+<section class={classes} aria-labelledby="outline-heading">
+  <h2 id="outline-heading" class="abe-course-outline__heading">{heading}</h2>
+  {intro && <p class="abe-course-outline__intro">{intro}</p>}
+
+  <ol class="abe-course-outline__list">
+    {modules.map((module) => (
+      <li class="abe-course-outline__item">
+        <div class="abe-course-outline__item-head">
+          <span class="abe-course-outline__module-num" aria-hidden="true">
+            {String(module.number).padStart(2, '0')}
+          </span>
+          <h3 class="abe-course-outline__item-title">{module.title}</h3>
+          {module.duration && (
+            <span class="abe-course-outline__duration">{module.duration}</span>
+          )}
+        </div>
+        <p class="abe-course-outline__summary">{module.summary}</p>
+      </li>
+    ))}
+  </ol>
+
+  {mapping && (
+    <div class="abe-course-outline__mapping">
+      <h3 class="abe-course-outline__mapping-heading">{mapping.heading}</h3>
+      <div class="abe-course-outline__mapping-wrap" role="region" aria-label={mapping.heading}>
+        <table class="abe-course-outline__mapping-table">
+          <thead>
+            <tr>
+              <th scope="col">{mapping.sourceLabel}</th>
+              <th scope="col">Covered in module</th>
+            </tr>
+          </thead>
+          <tbody>
+            {mapping.rows.map((row) => (
+              <tr>
+                <th scope="row">{row.area}</th>
+                <td>{row.coveredIn}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )}
+</section>
+
+<style>
+  .abe-course-outline {
+    margin: var(--space-32) 0;
+    font-family: var(--font-body);
+  }
+
+  .abe-course-outline__heading {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--space-12);
+    color: var(--text-body);
+  }
+
+  .abe-course-outline__intro {
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-subtle);
+    margin: 0 0 var(--space-24);
+  }
+
+  .abe-course-outline__list {
+    list-style: none;
+    counter-reset: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-16);
+  }
+
+  .abe-course-outline__item {
+    padding: var(--space-16) var(--space-24);
+    background: var(--surface-page);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+  }
+
+  .abe-course-outline__item-head {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-12);
+    margin-bottom: var(--space-8);
+  }
+
+  .abe-course-outline__module-num {
+    font-family: var(--font-mono);
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0.06em;
+    color: var(--text-brand);
+    background: var(--color-maroon-50);
+    padding: 2px var(--space-8);
+    border-radius: var(--radius-xs);
+    flex: 0 0 auto;
+  }
+
+  .abe-course-outline__item-title {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    line-height: 24px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-body);
+    flex: 1 1 auto;
+  }
+
+  .abe-course-outline__duration {
+    flex: 0 0 auto;
+    font-size: 12px;
+    line-height: 16px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .abe-course-outline__summary {
+    margin: 0;
+    color: var(--text-subtle);
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  /* Mapping table */
+  .abe-course-outline__mapping {
+    margin-top: var(--space-32);
+  }
+
+  .abe-course-outline__mapping-heading {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 700;
+    margin: 0 0 var(--space-12);
+    color: var(--text-body);
+  }
+
+  .abe-course-outline__mapping-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-page);
+  }
+
+  .abe-course-outline__mapping-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .abe-course-outline__mapping-table thead th {
+    background: var(--surface-subtle);
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-subtle);
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .abe-course-outline__mapping-table tbody th,
+  .abe-course-outline__mapping-table tbody td {
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--border-subtle);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .abe-course-outline__mapping-table tbody th {
+    font-weight: 500;
+    color: var(--text-body);
+  }
+
+  .abe-course-outline__mapping-table tbody td {
+    color: var(--text-subtle);
+    white-space: nowrap;
+  }
+
+  .abe-course-outline__mapping-table tbody tr:last-child th,
+  .abe-course-outline__mapping-table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+</style>

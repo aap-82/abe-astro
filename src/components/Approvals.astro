@@ -1,0 +1,264 @@
+---
+// Approvals — regulator panel used on state course pages to state
+// clearly which regulator the course aligns with, under which
+// legislation, and via which pathway (Direct / RTO / ASQA).
+//
+// For WA Owner Builder this renders LGIRS (Building and Energy,
+// Department of Local Government, Industry Regulation and Safety)
+// under the Building Services (Registration) Act 2011, via the
+// Direct knowledge-requirement pathway (Form 75).
+//
+// Deliberately text-first and SSR-only so every legislative name
+// and regulator body is indexable. Renders as an <aside> with
+// labelled rows rather than a table so it reads naturally both
+// visually and in a screen reader.
+
+export type AuthorityPathway = 'direct' | 'rto' | 'asqa';
+
+export interface RegulatorItem {
+  /** Regulator name, e.g. 'Building and Energy, Department of Local Government, Industry Regulation and Safety (LGIRS)'. */
+  name: string;
+  /** Short label, e.g. 'Western Australia'. */
+  jurisdiction: string;
+  /** Legislation citation, e.g. 'Building Services (Registration) Act 2011'. */
+  legislation: string;
+  /** Form or pathway identifier, e.g. 'Form 75 — Approval: Owner-builder'. */
+  instrument: string;
+  /** Regulator website URL. */
+  url?: string;
+  /** Date this approval was last verified (e.g. '21 April 2026'). */
+  verifiedOn?: string;
+}
+
+export interface Props {
+  /** Section heading printed above the panel. */
+  heading: string;
+  /** Short intro describing what the panel is stating. */
+  intro?: string;
+  pathway: AuthorityPathway;
+  regulators: RegulatorItem[];
+  /** Optional disclosure — e.g. whether ASQA disclosure applies. */
+  disclosure?: string;
+  class?: string;
+}
+
+const PATHWAY_LABELS: Record<AuthorityPathway, string> = {
+  direct: 'Direct — state knowledge-requirement model',
+  rto:    'RTO-accredited — delivered via registered training organisation partner',
+  asqa:   'ASQA-accredited — nationally recognised training'
+};
+
+const PATHWAY_DESCRIPTIONS: Record<AuthorityPathway, string> = {
+  direct:
+    'The state regulator sets knowledge requirements that any competent provider can deliver. ' +
+    'Course completion is accepted on the strength of the content, not the provider\u2019s accreditation.',
+  rto:
+    'Delivery is carried out under the scope of a registered training organisation (RTO) partner. ' +
+    'Course completion results in a nationally recognised statement of attainment.',
+  asqa:
+    'The course is accredited by the Australian Skills Quality Authority (ASQA) and leads to ' +
+    'a nationally recognised qualification.'
+};
+
+const { heading, intro, pathway, regulators, disclosure, class: className = '' } = Astro.props;
+const classes = ['abe-approvals', className].filter(Boolean).join(' ');
+---
+
+<section class={classes} aria-labelledby="approvals-heading">
+  <h2 id="approvals-heading" class="abe-approvals__heading">{heading}</h2>
+  {intro && <p class="abe-approvals__intro">{intro}</p>}
+
+  <aside class="abe-approvals__panel" role="note">
+    <div class="abe-approvals__pathway">
+      <span class="abe-approvals__pathway-tag">AUTHORITY PATHWAY</span>
+      <p class="abe-approvals__pathway-label">{PATHWAY_LABELS[pathway]}</p>
+      <p class="abe-approvals__pathway-desc">{PATHWAY_DESCRIPTIONS[pathway]}</p>
+    </div>
+
+    <ul class="abe-approvals__list">
+      {regulators.map((r) => (
+        <li class="abe-approvals__item">
+          <p class="abe-approvals__jurisdiction">{r.jurisdiction}</p>
+          <p class="abe-approvals__regulator">
+            {r.url ? (
+              <a href={r.url} rel="noopener noreferrer">{r.name}</a>
+            ) : (
+              r.name
+            )}
+          </p>
+          <dl class="abe-approvals__facts">
+            <div class="abe-approvals__fact">
+              <dt>Legislation</dt>
+              <dd>{r.legislation}</dd>
+            </div>
+            <div class="abe-approvals__fact">
+              <dt>Instrument</dt>
+              <dd>{r.instrument}</dd>
+            </div>
+            {r.verifiedOn && (
+              <div class="abe-approvals__fact">
+                <dt>Last verified</dt>
+                <dd>{r.verifiedOn}</dd>
+              </div>
+            )}
+          </dl>
+        </li>
+      ))}
+    </ul>
+
+    {disclosure && (
+      <p class="abe-approvals__disclosure">{disclosure}</p>
+    )}
+  </aside>
+</section>
+
+<style>
+  .abe-approvals {
+    margin: var(--space-32) 0;
+    font-family: var(--font-body);
+  }
+
+  .abe-approvals__heading {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--space-12);
+    color: var(--text-body);
+  }
+
+  .abe-approvals__intro {
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-subtle);
+    margin: 0 0 var(--space-24);
+  }
+
+  .abe-approvals__panel {
+    border: 1px solid var(--color-info-500);
+    border-radius: var(--radius-md);
+    background: var(--color-info-100);
+    color: var(--color-info-700);
+    padding: var(--space-24);
+  }
+
+  .abe-approvals__pathway {
+    margin-bottom: var(--space-16);
+  }
+
+  .abe-approvals__pathway-tag {
+    display: inline-block;
+    font-size: 11px;
+    line-height: 16px;
+    letter-spacing: 0.06em;
+    font-weight: 700;
+    text-transform: uppercase;
+    background: rgba(255, 255, 255, 0.6);
+    color: inherit;
+    padding: 2px var(--space-8);
+    border-radius: var(--radius-xs);
+    margin-bottom: var(--space-8);
+  }
+
+  .abe-approvals__pathway-label {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    line-height: 24px;
+    font-weight: 700;
+    margin: 0 0 var(--space-4);
+    color: inherit;
+  }
+
+  .abe-approvals__pathway-desc {
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+    color: inherit;
+    opacity: 0.9;
+  }
+
+  .abe-approvals__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--space-16);
+    border-top: 1px solid rgba(20, 66, 120, 0.2);
+    padding-top: var(--space-16);
+  }
+
+  .abe-approvals__item + .abe-approvals__item {
+    border-top: 1px solid rgba(20, 66, 120, 0.2);
+    padding-top: var(--space-16);
+  }
+
+  .abe-approvals__jurisdiction {
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin: 0 0 var(--space-4);
+    color: inherit;
+    opacity: 0.85;
+  }
+
+  .abe-approvals__regulator {
+    font-family: var(--font-heading);
+    font-size: 17px;
+    line-height: 24px;
+    font-weight: 700;
+    margin: 0 0 var(--space-12);
+    color: inherit;
+  }
+
+  .abe-approvals__regulator a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .abe-approvals__facts {
+    display: grid;
+    gap: var(--space-8);
+    margin: 0;
+  }
+
+  .abe-approvals__fact {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: var(--space-12);
+    font-size: 14px;
+    line-height: 20px;
+  }
+
+  @media (max-width: 480px) {
+    .abe-approvals__fact {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+
+  .abe-approvals__fact dt {
+    font-weight: 600;
+    color: inherit;
+    opacity: 0.75;
+    margin: 0;
+  }
+
+  .abe-approvals__fact dd {
+    margin: 0;
+    color: inherit;
+  }
+
+  .abe-approvals__disclosure {
+    margin: var(--space-16) 0 0;
+    padding-top: var(--space-16);
+    border-top: 1px solid rgba(20, 66, 120, 0.2);
+    font-size: 13px;
+    line-height: 18px;
+    color: inherit;
+    opacity: 0.85;
+  }
+</style>

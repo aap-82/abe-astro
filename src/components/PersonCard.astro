@@ -1,0 +1,209 @@
+---
+// PersonCard — on-page attribution for course developer, reviewer,
+// author, or instructor. Takes a slug from the PEOPLE registry
+// (src/lib/people.ts) and renders the card layout used by the
+// "Content development and review" section on course pages. The
+// matching Person schema node is emitted separately via personSchema()
+// in lib/schema.ts — keep the two in sync by always going through
+// the PEOPLE registry.
+
+import { getPerson, personUrl } from '../lib/people';
+
+export type PersonCardRole = 'Developed by' | 'Reviewed by' | 'Written by' | 'Taught by';
+
+export interface Props {
+  /** Slug from PEOPLE registry, e.g. 'dominic-ogburn'. */
+  slug: string;
+  /** Role label printed above the name. */
+  roleLabel: PersonCardRole;
+  /** Optional review or publication date in AU format (e.g. '18 April 2026'). */
+  dated?: string;
+  class?: string;
+}
+
+const { slug, roleLabel, dated, class: className = '' } = Astro.props;
+const person = getPerson(slug);
+const profileHref = personUrl(person);
+const hasCredentials = (person.credentials && person.credentials.length > 0);
+
+const classes = ['abe-person-card', className].filter(Boolean).join(' ');
+---
+
+<article class={classes} itemscope itemtype="https://schema.org/Person">
+  <div class="abe-person-card__media">
+    {person.image ? (
+      <img
+        src={person.image}
+        alt={`Headshot of ${person.name}`}
+        width="96"
+        height="96"
+        loading="lazy"
+        decoding="async"
+        class="abe-person-card__photo"
+      />
+    ) : (
+      <div class="abe-person-card__photo-placeholder" aria-hidden="true">
+        {person.givenName.charAt(0)}{person.familyName.charAt(0)}
+      </div>
+    )}
+  </div>
+
+  <div class="abe-person-card__body">
+    <p class="abe-person-card__role">
+      {roleLabel}
+      {dated && <span class="abe-person-card__dated"> — {dated}</span>}
+    </p>
+
+    <p class="abe-person-card__name">
+      {profileHref ? (
+        <a href={profileHref} itemprop="url">
+          <span itemprop="name">{person.name}</span>
+        </a>
+      ) : (
+        <span itemprop="name">{person.name}</span>
+      )}
+    </p>
+
+    <p class="abe-person-card__credential" itemprop="jobTitle">
+      {person.credentialLine}
+    </p>
+
+    <p class="abe-person-card__bio" itemprop="description">{person.bio}</p>
+
+    {hasCredentials && (
+      <ul class="abe-person-card__chips" aria-label={`Credentials for ${person.name}`}>
+        {person.credentials!.map((c) => (
+          <li class="abe-person-card__chip">{c}</li>
+        ))}
+      </ul>
+    )}
+  </div>
+</article>
+
+<style>
+  .abe-person-card {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: var(--space-24);
+    padding: var(--space-24);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-page);
+    font-family: var(--font-body);
+  }
+
+  @media (max-width: 480px) {
+    .abe-person-card {
+      grid-template-columns: 1fr;
+      text-align: left;
+    }
+  }
+
+  .abe-person-card__media {
+    flex: 0 0 auto;
+  }
+
+  .abe-person-card__photo {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    display: block;
+    background: var(--surface-muted);
+  }
+
+  .abe-person-card__photo-placeholder {
+    width: 96px;
+    height: 96px;
+    border-radius: var(--radius-full);
+    background: var(--color-maroon-100);
+    color: var(--color-maroon-700);
+    display: grid;
+    place-items: center;
+    font-family: var(--font-heading);
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+
+  .abe-person-card__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    min-width: 0;
+  }
+
+  .abe-person-card__role {
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-brand);
+    margin: 0;
+  }
+
+  .abe-person-card__dated {
+    font-weight: 400;
+    color: var(--text-muted);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+
+  .abe-person-card__name {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    line-height: 26px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--text-body);
+  }
+
+  .abe-person-card__name a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .abe-person-card__name a:hover,
+  .abe-person-card__name a:focus-visible {
+    color: var(--text-link-hover);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .abe-person-card__credential {
+    font-size: 14px;
+    line-height: 20px;
+    font-weight: 600;
+    color: var(--text-subtle);
+    margin: 0;
+  }
+
+  .abe-person-card__bio {
+    font-size: 15px;
+    line-height: 22px;
+    color: var(--text-subtle);
+    margin: 0;
+  }
+
+  .abe-person-card__chips {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-8) 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-8);
+  }
+
+  .abe-person-card__chip {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 var(--space-12);
+    border-radius: var(--radius-full);
+    background: var(--surface-muted);
+    color: var(--text-subtle);
+    font-size: 12px;
+    line-height: 16px;
+    font-weight: 500;
+  }
+</style>

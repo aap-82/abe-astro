@@ -1,0 +1,235 @@
+---
+// Pricing — multi-row pricing table used on course pages where the
+// student pays one fee to ABE and a separate fee to the regulator.
+// Renders the headline ABE price card on top and a transparent
+// breakdown table below. Designed to match the Owner Builder WA
+// brief: ABE $179 + LGIRS Form 75 $212 (residential) / $467
+// (industrial-commercial), all paid separately to the Building
+// Services Board.
+//
+// All prices are SSR'd as text so they appear in raw HTML for SEO.
+
+export interface PricingRow {
+  label: string;
+  /** Plain-text amount, e.g. '$179' or '$212 (non-refundable)'. */
+  amount: string;
+  paidTo: string;
+  /** Optional muted note printed under the row. */
+  note?: string;
+  /** Marks the headline row — gets the brand-tint background. */
+  primary?: boolean;
+}
+
+export interface Props {
+  /** Section heading printed above the table. */
+  heading: string;
+  /** Sub-heading or pre-table paragraph. */
+  intro?: string;
+  rows: PricingRow[];
+  /** Optional small-print disclaimer printed below the table. */
+  disclaimer?: string;
+  /** Optional CTA bar: button label and href. */
+  ctaLabel?: string;
+  ctaHref?: string;
+  /** Optional verified callout-style note printed beneath the table. */
+  verifiedNote?: string;
+  class?: string;
+}
+
+const {
+  heading,
+  intro,
+  rows,
+  disclaimer,
+  ctaLabel,
+  ctaHref,
+  verifiedNote,
+  class: className = ''
+} = Astro.props;
+
+const classes = ['abe-pricing', className].filter(Boolean).join(' ');
+---
+
+<section class={classes} aria-labelledby="pricing-heading">
+  <h2 id="pricing-heading" class="abe-pricing__heading">{heading}</h2>
+  {intro && <p class="abe-pricing__intro">{intro}</p>}
+
+  <div class="abe-pricing__table-wrap" role="region" aria-label="Pricing breakdown">
+    <table class="abe-pricing__table">
+      <thead>
+        <tr>
+          <th scope="col">Cost</th>
+          <th scope="col">Amount</th>
+          <th scope="col">Paid to</th>
+        </tr>
+      </thead>
+      <tbody>
+        {rows.map((row) => (
+          <tr class={row.primary ? 'abe-pricing__row abe-pricing__row--primary' : 'abe-pricing__row'}>
+            <th scope="row">
+              {row.label}
+              {row.note && <span class="abe-pricing__note"> — {row.note}</span>}
+            </th>
+            <td class="abe-pricing__amount">{row.amount}</td>
+            <td class="abe-pricing__paid-to">{row.paidTo}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  {verifiedNote && (
+    <p class="abe-pricing__verified" role="note">{verifiedNote}</p>
+  )}
+
+  {disclaimer && (
+    <p class="abe-pricing__disclaimer">{disclaimer}</p>
+  )}
+
+  {ctaLabel && ctaHref && (
+    <div class="abe-pricing__cta">
+      <a href={ctaHref} class="abe-pricing__cta-button">{ctaLabel}</a>
+    </div>
+  )}
+</section>
+
+<style>
+  .abe-pricing {
+    margin: var(--space-32) 0;
+    font-family: var(--font-body);
+  }
+
+  .abe-pricing__heading {
+    font-family: var(--font-heading);
+    font-size: 28px;
+    line-height: 36px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    margin: 0 0 var(--space-12);
+    color: var(--text-body);
+  }
+
+  .abe-pricing__intro {
+    font-size: 16px;
+    line-height: 24px;
+    color: var(--text-subtle);
+    margin: 0 0 var(--space-24);
+  }
+
+  .abe-pricing__table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: var(--surface-page);
+  }
+
+  .abe-pricing__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    line-height: 22px;
+  }
+
+  .abe-pricing__table thead th {
+    background: var(--surface-subtle);
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-subtle);
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    padding: var(--space-12) var(--space-16);
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .abe-pricing__table tbody th,
+  .abe-pricing__table tbody td {
+    padding: var(--space-16);
+    border-bottom: 1px solid var(--border-subtle);
+    vertical-align: top;
+    text-align: left;
+  }
+
+  .abe-pricing__table tbody tr:last-child th,
+  .abe-pricing__table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .abe-pricing__row--primary {
+    background: var(--surface-brand-tint);
+  }
+
+  .abe-pricing__row--primary th,
+  .abe-pricing__row--primary .abe-pricing__amount {
+    color: var(--color-maroon-800);
+    font-weight: 700;
+  }
+
+  .abe-pricing__amount {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--text-body);
+    white-space: nowrap;
+  }
+
+  .abe-pricing__paid-to {
+    color: var(--text-subtle);
+  }
+
+  .abe-pricing__note {
+    color: var(--text-muted);
+    font-weight: 400;
+    font-size: 13px;
+  }
+
+  .abe-pricing__verified {
+    margin: var(--space-16) 0 0;
+    padding: var(--space-12) var(--space-16);
+    border: 1px solid var(--color-success-500);
+    background: var(--color-success-100);
+    color: var(--color-success-700);
+    font-size: 13px;
+    line-height: 18px;
+    border-radius: var(--radius-sm);
+  }
+
+  .abe-pricing__disclaimer {
+    margin: var(--space-12) 0 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 18px;
+  }
+
+  .abe-pricing__cta {
+    margin-top: var(--space-24);
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .abe-pricing__cta-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 48px;
+    padding: 0 var(--space-32);
+    border-radius: var(--radius-sm);
+    background: var(--action-primary);
+    color: var(--text-inverse);
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 20px;
+    text-decoration: none;
+    transition: background var(--duration-base) var(--ease-standard);
+  }
+
+  .abe-pricing__cta-button:hover,
+  .abe-pricing__cta-button:focus-visible {
+    background: var(--action-primary-hover);
+    outline: none;
+  }
+  .abe-pricing__cta-button:active {
+    background: var(--action-primary-active);
+  }
+</style>

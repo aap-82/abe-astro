@@ -1,0 +1,303 @@
+---
+metaTitle: "Owner Builder Course WA — Form 75 Training Online — ABE"
+metaDescription: "Complete WA's owner builder course online. Meets LGIRS Form 75 knowledge requirements. Self-paced, same-day certificate. Start your Form 75 application today."
+canonical: "https://www.abeeducation.edu.au/wa-owner-builder-course"
+h1: "Owner Builder Course WA — Online Training for Form 75"
+lastUpdated: "2026-04-21"
+
+breadcrumb:
+  - name: "Home"
+    url: "/"
+  - name: "Owner Builder Training"
+    url: "/owner-builder-training"
+  - name: "WA Owner Builder"
+    url: "/wa-owner-builder-course"
+
+trustBar:
+  - "Meets LGIRS Form 75 knowledge requirements"
+  - "31,000+ students trained across Australia since 2007"
+  - "Developed by Dominic Ogburn — licensed NSW builder, 2005 NSW Minister's Award"
+  - "100% online · self-paced · certificate issued on completion"
+
+hero:
+  overline: "WA Owner Builder Course"
+  subhead: "Complete the knowledge training accepted on LGIRS Form 75 — 100% online, self-paced, and the Certificate of Completion is issued the same day. Built specifically for Western Australian owner builders, not generic Australian material."
+  primaryCta:
+    label: "Enrol — $179"
+    href: "/checkout?course=wa-owner-builder"
+  secondaryCta:
+    label: "Read the course outline"
+    href: "#course-outline"
+  surface: "page"
+
+faq:
+  heading: "Frequently asked questions"
+  items:
+    - question: "Do I need an owner builder course to apply for a WA permit?"
+      answer: "Yes, unless you qualify through Form 75's other pathways. A current registered Building Practitioner in WA (Pathway 2) is fully exempt. A current registered architect, building surveyor, or building engineer (Pathway 3) can skip the course but still needs a white or blue card. Everyone else demonstrates owner-builder knowledge under Pathway 1 by completing an accepted course dated within two years of lodgement."
+    - question: "Is ABE's WA owner builder course accepted by LGIRS?"
+      answer: "Yes. ABE's course meets the knowledge requirements of Form 75: Approval — Owner-builder. WA operates a knowledge-requirement model rather than a provider-approval regime, which means any course that genuinely covers the Form 75 knowledge areas is acceptable. ABE's course has been used successfully by owner builders across Western Australia."
+    - question: "How long does the WA owner builder course take?"
+      answer: "Most students finish in 3 to 5 hours. You can do it in one sitting or break it across several sessions — the course is self-paced and your enrolment stays active for 12 months. You can log back in any time during that period to revisit the material or complete outstanding assessments."
+    - question: "Do I still need a White Card if I'm the owner builder?"
+      answer: "Yes — at least one applicant on Form 75 must hold a current White Card or Blue Card (General Construction Induction training — the unit of competency 'Prepare to work safely in the construction industry'). Owner builders are in charge of an active construction site, and LGIRS requires the same baseline safety training expected of any person entering construction work in WA. If you don't have one, ABE's WA White Card course can be added alongside the owner builder course."
+    - question: "Can I be an owner builder twice in WA?"
+      answer: "Not usually. LGIRS will only issue owner builder approval once every six years. You can apply for a waiver of the six-year rule using the final page of Form 75, but it's granted at the Building Services Board's discretion — not automatically. Common grounds for a waiver include genuine hardship, family changes, or the earlier permit not proceeding."
+    - question: "Can I sell or rent the home after I build it?"
+      answer: "Not on the same terms as a registered builder's home. Your owner-builder approval is granted on the condition that you intend to occupy or use the finished building — not sell or rent on completion. If you later sell the dwelling within seven years of the building permit being issued, you must provide the purchaser with home indemnity insurance under the Home Building Contracts Act 1991. Repeat owner-builder approvals are also restricted by the six-year rule."
+    - question: "What can I build as an owner builder in WA?"
+      answer: "Four categories are allowed under LGIRS rules: a detached dwelling (including a granny flat); additions or alterations to an existing free-standing dwelling; non-habitable buildings such as garages, carports, or sheds; and small commercial buildings under 500 m² that aren't detached houses, Class 10 buildings, or farm buildings. Any work over $20,000 requires the permit."
+    - question: "What if I've been out of the building industry for a while?"
+      answer: "Form 75 Pathway 4 lets you rely on previous registration as a Building Practitioner, architect, building surveyor, or building engineer if it expired within the last five years — you attach a copy of the expired licence along with a current white or blue card. If your registration lapsed more than five years ago, Pathway 4 doesn't apply and you'll complete an owner-builder course under Pathway 1 like any other applicant."
+
+ctaBand:
+  headline: "Get your WA Owner Builder Certificate today"
+  subhead: "$179 — online, self-paced, certificate issued the same day, ready to attach to your Form 75 application."
+  primaryCta:
+    label: "Enrol now"
+    href: "/checkout?course=wa-owner-builder"
+  secondaryCta:
+    label: "View the WA Owner Builder + White Card bundle"
+    href: "/bundles/wa-owner-builder-white-card"
+  variant: "brand"
+---
+
+import Callout from '../../components/Callout.astro';
+import Pricing from '../../components/Pricing.astro';
+import CourseOutline from '../../components/CourseOutline.astro';
+import Approvals from '../../components/Approvals.astro';
+import PersonCard from '../../components/PersonCard.astro';
+
+export const courseModules = [
+  { number: 1, title: 'Your legal responsibilities as the permit holder', summary: 'Understanding the owner-builder role under the Building Services (Registration) Act 2011 and the Building Act 2011 — what LGIRS expects of you as the person in charge of the build.', duration: '30 min' },
+  { number: 2, title: 'Approvals and permits you\u2019ll need', summary: 'Building permit, occupancy permit, and local-government consents — how they fit together and in what order they are obtained.', duration: '30 min' },
+  { number: 3, title: 'Engaging and managing tradespeople', summary: 'Licensed-trade requirements, written contracts, and payment rules when you, not a registered builder, are signing the subcontracts.', duration: '35 min' },
+  { number: 4, title: 'Building insurance obligations', summary: 'WA\u2019s home indemnity insurance rules, public liability cover, and when each applies on an owner-built site.', duration: '25 min' },
+  { number: 5, title: 'Workplace health and safety on an owner-built site', summary: 'WorkSafe WA duty-of-care obligations when you are the person in control of the workplace.', duration: '35 min' },
+  { number: 6, title: 'Record-keeping, inspections, and practical completion', summary: 'Inspection triggers, variation records, defect management, and what practical completion looks like for an owner-built home.', duration: '30 min' },
+  { number: 7, title: 'What you can and cannot do as an owner builder in WA', summary: 'Scope limits, prohibited sub-contracting arrangements, and the specific categories of work permitted under LGIRS rules.', duration: '30 min' },
+  { number: 8, title: 'Selling, renting, or transferring an owner-built property', summary: 'The seven-year rule, home indemnity insurance on sale, and the restrictions on commercial letting or resale intent.', duration: '25 min' }
+];
+
+export const form75Mapping = {
+  heading: 'How the course maps to Form 75 knowledge areas',
+  sourceLabel: 'Form 75 knowledge area',
+  rows: [
+    { area: 'Duties and responsibilities of an owner-builder', coveredIn: 'Modules 1, 2' },
+    { area: 'Engaging building trades', coveredIn: 'Module 3' },
+    { area: 'Insurance obligations', coveredIn: 'Module 4' },
+    { area: 'Workplace health and safety', coveredIn: 'Module 5' },
+    { area: 'Building approvals and inspections', coveredIn: 'Modules 2, 6' },
+    { area: 'Selling or renting an owner-built property', coveredIn: 'Module 8' }
+  ]
+};
+
+export const pricingRows = [
+  { label: 'WA Owner Builder Course (training)', amount: '$179', paidTo: 'ABE Education', primary: true },
+  { label: 'LGIRS Form 75 — residential building', amount: '$212', paidTo: 'Building Services Board (LGIRS)', note: 'non-refundable' },
+  { label: 'LGIRS Form 75 — industrial/commercial building', amount: '$467', paidTo: 'Building Services Board (LGIRS)', note: 'non-refundable' }
+];
+
+export const waRegulators = [
+  {
+    jurisdiction: 'Western Australia',
+    name: 'Building and Energy, Department of Local Government, Industry Regulation and Safety (LGIRS)',
+    legislation: 'Building Services (Registration) Act 2011',
+    instrument: 'Form 75 — Approval: Owner-builder',
+    url: 'https://www.wa.gov.au/service/building-utilities-and-essential-services/building/apply-owner-builder-approval',
+    verifiedOn: '21 April 2026'
+  }
+];
+
+<Approvals
+  heading="Regulator alignment"
+  intro="ABE Education is a direct training provider for this course. WA operates a knowledge-requirement model under Form 75, which any competent provider may deliver."
+  pathway="direct"
+  regulators={waRegulators}
+  disclosure="This course is not ASQA-accredited and does not lead to a nationally recognised qualification. It is the knowledge training accepted under LGIRS Form 75: Approval — Owner-builder. For nationally recognised White Card training, see our RTO-partner course."
+/>
+
+## What is the WA owner builder course and who needs it?
+
+The WA owner builder course is the knowledge training accepted on Form 75 — the application Western Australians lodge with the Building Services Board to build or renovate their own home without hiring a registered builder. You need it if you plan work worth more than $20,000 on land you own, and you're not already a registered building practitioner.
+
+Western Australia treats owner building as a privilege, not a default right. Before approving your permit, the Building Services Board (administered by the Department of Local Government, Industry Regulation and Safety — LGIRS) needs evidence that you understand your legal, safety, and contractual responsibilities as the person in charge of the build. Completing an accepted owner builder course is the standard way to demonstrate that knowledge on Form 75.
+
+ABE Education's WA course is delivered online, self-paced, and designed specifically around the knowledge requirements listed on Form 75. You don't sit an exam at a venue. You work through the modules at your own pace, pass the online assessments, and receive your Certificate of Completion — which you upload or attach to your Form 75 submission.
+
+<Callout
+  variant="verified"
+  title="LGIRS Form 75 knowledge-requirement pathway"
+  sourceUrl="https://www.wa.gov.au/service/building-utilities-and-essential-services/building/apply-owner-builder-approval"
+  sourceLabel="LGIRS — Owner-builder approval"
+>
+Knowledge-requirement pathway verified against LGIRS Form 75 — Approval: Owner-builder on 20 April 2026.
+</Callout>
+
+### Who typically takes this course
+
+- Homeowners planning a new house, granny flat, or major extension over $20,000
+- Landowners constructing a garage, shed, carport, or other non-habitable outbuilding
+- Small commercial owners adding to or altering a building under 500 m² (non-Class 10, not a detached dwelling, not a farm building)
+- Anyone without current Building Practitioner registration who wants to project-manage the build themselves
+
+<Callout variant="warning" title="Owner-builder land and occupancy rules">
+You must own (or hold a prescribed interest in) the land, and you must intend to occupy or use the finished building. If your plan is to sell or rent on completion, owner builder approval is the wrong pathway. LGIRS explicitly excludes immediate commercial letting or resale intent.
+</Callout>
+
+## How does ABE's WA owner builder course work?
+
+You enrol online, log in straight away, and work through the modules at your own pace. Most students finish in 3–5 hours across one or two sittings. Each section ends with a short assessment; when you pass the final assessment, your Certificate of Completion is issued the same day and emailed as a PDF ready for your Form 75 application.
+
+### Step 1 — Enrol and log in
+
+Enrolment takes under two minutes. Pay securely online, receive your login details, and start immediately. Your enrolment stays active for 12 months, so you can work at your own pace and revisit the material whenever you need to.
+
+### Step 2 — Work through eight modules
+
+Core knowledge areas aligned to the Form 75 checklist:
+
+- Your legal responsibilities as the permit holder
+- The approvals and permits you'll need (and from whom)
+- Engaging and managing tradespeople, including contracts and payments
+- Building insurance — home indemnity insurance and public liability cover
+- Workplace health and safety obligations on an owner-built site
+- Record-keeping, inspections, and practical completion
+- What you can and cannot do as an owner builder in WA
+- Selling, renting, or transferring an owner-built property
+
+### Step 3 — Pass the final assessment and download your certificate
+
+After the final assessment, your Certificate of Completion is generated automatically and emailed to you as a PDF. Print it, attach the PDF to your Form 75 submission, or upload it with your online application.
+
+<Callout variant="crossref" title="Not sure which state pathway applies?">
+Compare owner builder training across states on our [owner builder training hub](/owner-builder-training).
+</Callout>
+
+<h2 id="course-outline">What will the WA owner builder course teach you?</h2>
+
+You'll learn everything LGIRS expects you to know before they approve your Form 75 — the legal framework of owner building in WA, how to engage trades safely and contractually, your insurance obligations, your WHS duties on site, and the practical steps from permit to completion. The content is written specifically for WA law, not generic Australian owner-builder material.
+
+### Learning outcomes
+
+- Understand the legal structure of WA owner building under the Building Services (Registration) Act 2011 and the Building Act 2011
+- Identify which approvals you need — building permit, occupancy permit, and related local-government consents
+- Engage subcontractors lawfully — licensed trade requirements, written contracts, and payment rules
+- Apply WA's home indemnity insurance rules and understand when cover is required
+- Meet WorkSafe WA duty-of-care obligations as the person in control of the workplace
+- Plan for inspections, variations, defects, and practical completion
+- Know the restrictions on selling, leasing, or transferring an owner-built property
+
+<CourseOutline
+  heading="Course outline"
+  intro="Eight modules, roughly 3–5 hours total, mapped to the Form 75 knowledge areas LGIRS tests for."
+  modules={courseModules}
+  mapping={form75Mapping}
+/>
+
+<Callout
+  variant="verified"
+  title="Form 75 knowledge-area mapping"
+  sourceUrl="https://www.wa.gov.au/service/building-utilities-and-essential-services/building/apply-owner-builder-approval"
+  sourceLabel="LGIRS — Owner-builder approval"
+>
+Knowledge-area mapping verified against LGIRS Form 75 on 20 April 2026.
+</Callout>
+
+## Who can enrol, and what are the WA owner builder eligibility rules?
+
+Anyone 18+ can enrol in the course — there are no prior qualifications required. To use the certificate for owner builder approval, you must also meet LGIRS's separate application rules: you own the land, you intend to live in or use the finished building, you've held a White Card, and you haven't held an owner builder permit in the last six years (unless you get a waiver).
+
+### ABE course enrolment requirements
+
+- No prior qualifications — the course is written for non-builders
+- Reliable internet and a computer, tablet, or phone
+- English reading and comprehension at a working level (the course is delivered in plain English)
+- Around 3–5 hours of study time
+
+### LGIRS eligibility rules for Form 75 applicants
+
+- Each applicant must be an individual — not a corporate body, trust, or other entity
+- You (or all co-owners) own the land, or hold a prescribed interest in it
+- You intend to occupy or use the building when finished — not sell or rent on completion
+- At least one applicant holds a current White Card or Blue Card — the General Construction Induction training card covering the unit of competency 'Prepare to work safely in the construction industry'
+- You haven't been approved as an owner builder in the last six years, unless you've applied for a waiver on the last page of Form 75
+- Your owner-builder knowledge course was completed no more than two years before you lodge Form 75
+
+<Callout variant="warning" title="Two-year certificate window">
+LGIRS will not accept a Form 75 relying on a course certificate dated more than two years before the application. Keep your certificate date in mind when timing the submission.
+</Callout>
+
+### Form 75 version change — important for 2026 applicants
+
+<Callout variant="legal" title="Old Form 75 cut-off: 31 May 2026">
+LGIRS is rolling out an updated Form 75. Applications submitted on the old version will only be accepted up to 31 May 2026. From 1 June 2026, all applications must use the current form. Download the live version directly from LGIRS before lodging.
+</Callout>
+
+<Callout
+  variant="verified"
+  title="Form 75 version-change date"
+  sourceUrl="https://www.wa.gov.au/service/building-utilities-and-essential-services/building/apply-owner-builder-approval"
+  sourceLabel="LGIRS — Owner-builder approval"
+>
+Form 75 version-change date verified against wa.gov.au owner-builder approval on 21 April 2026.
+</Callout>
+
+### How long is an owner-builder approval valid?
+
+An owner-builder approval expires six months after the date of issue if you don't lodge a building permit application in that window. If you do apply within six months and the permit is refused, the approval expires on refusal. If the building permit is granted, the approval then runs for the life of the building permit — and building permits are valid for two years, with scope to request a longer term at application or to extend an existing permit afterwards through your local government.
+
+<Callout variant="warning" title="Six-month approval window">
+Letting the six-month window lapse means lodging a fresh Form 75 and paying the fee again. Plan the timeline so your permit application sits comfortably inside the six-month window.
+</Callout>
+
+<Callout
+  variant="verified"
+  title="Validity rules"
+  sourceUrl="https://www.wa.gov.au/service/building-utilities-and-essential-services/building/apply-owner-builder-approval"
+  sourceLabel="LGIRS — Owner-builder approval"
+>
+Validity rules verified against wa.gov.au — Owner-builder approval on 21 April 2026.
+</Callout>
+
+## How much does ABE's WA owner builder course cost?
+
+ABE's WA Owner Builder Course is $179 — a single one-off fee including all modules, assessments, and your Certificate of Completion. There are no extra charges for the certificate and no monthly subscription. The LGIRS Form 75 application fee is paid separately to the Building Services Board.
+
+<Pricing
+  heading="What you pay, and who you pay it to"
+  intro="Two separate fees. ABE charges for the training; LGIRS charges for the Form 75 application."
+  rows={pricingRows}
+  verifiedNote="LGIRS application fees verified against the LGIRS Building and Energy fee schedule on 21 April 2026. Fees are set by WA government regulation and may change at any time — confirm the current fee on the LGIRS schedule at time of lodgement."
+  disclaimer="ABE Education's training fee is separate from the LGIRS permit application fee. Completing our course does not constitute application for owner builder approval — you must still lodge Form 75 with the Building Services Board after completing the training."
+  ctaLabel="Enrol now — $179"
+  ctaHref="/checkout?course=wa-owner-builder"
+/>
+
+## Why take the WA owner builder course with ABE Education?
+
+ABE Education is a direct training provider operating since 2007, with state approvals in the ACT (Access Canberra) and Tasmania (CBOS), and course content meeting LGIRS Form 75 knowledge requirements in WA. We've trained more than 31,000 students across Australia. Our WA owner builder course is written specifically to the knowledge areas LGIRS tests for on Form 75 — not generic Australian owner-builder content with state names swapped in.
+
+- **WA-specific content.** Course content references the Building Services (Registration) Act 2011 and Building Act 2011 (WA), LGIRS application procedures, and WorkSafe WA WHS duties — not generic national material.
+- **Same-day certificate.** Pass the final assessment and your PDF certificate is emailed within minutes, ready for Form 75 submission.
+- **12-month access.** Revisit the course content for a full year after enrolment — useful if your build timeline stretches out.
+- **Experienced course development team.** Developed by a licensed NSW builder with 40+ years of construction experience and independently reviewed for compliance and currency.
+- **Real human support.** Call +61 2 9798 5000 or email the ABE team during business hours — not a chatbot.
+
+<Callout variant="bundle" title="WA Owner Builder + White Card bundle">
+Most WA owner builder applicants need both the owner builder course and a General Construction Induction (White Card) on their Form 75. Enrol in both with ABE and save on the combined enrolment. [View the WA Owner Builder + White Card bundle →](/bundles/wa-owner-builder-white-card)
+</Callout>
+
+<Callout variant="crossref" title="Protect your build with owner builder insurance">
+Owner builders in WA carry the same liability exposure as a registered builder — but without a builder's insurance cover. Our partner InsuranceTek (led by principal broker Mark Adams of Ausure Pty Ltd, AFSL 238433) arranges owner builder home indemnity insurance, public liability, and construction works cover specifically for WA owner builders. [Explore WA owner builder insurance options →](/wa-owner-builder-insurance)
+</Callout>
+
+<h2 id="content-review">How is this course developed and reviewed?</h2>
+
+Every ABE course goes through a two-stage quality process. First, the course content is developed by Dominic Ogburn — a licensed NSW builder with 40+ years in Australian construction. Second, the published course page is independently reviewed by Warwick Smith — Senior Consultant, Compliance and Operations at Corporate Development Resource Group — to verify that every legislative reference, regulatory name, and fee figure is current and accurate.
+
+This is how ABE verifies that the information on this page matches what Western Australian owner builders actually need to do under current LGIRS rules. The course developer works from the Form 75 knowledge areas and Australian building legislation. The compliance reviewer then checks the published page for currency against the live LGIRS website, the current Form 75 PDF, and the Building Services (Registration) Act 2011. Any time LGIRS updates Form 75, a regulation changes, or a fee figure moves, the page is flagged for re-review.
+
+<PersonCard slug="dominic-ogburn" roleLabel="Developed by" dated="14 April 2026" />
+
+<PersonCard slug="warwick-smith" roleLabel="Reviewed by" dated="14 April 2026" />
