@@ -47,15 +47,14 @@ const { Content } = await entry.render();
 const developer = getPerson('dominic-ogburn');
 const reviewer  = getPerson('warwick-smith');
 
-// Map the plain-string trustBar array to typed items with icons.
-// The icon sequence cycles across the four canonical signals:
-// approval, cohort, authority, delivery.
-const trustIcons: ('check' | 'star' | 'award' | 'clock' | 'shield' | 'lock')[] =
-  ['check', 'star', 'award', 'clock'];
-const trustItems = (data.trustBar ?? []).map((label, i) => ({
-  icon: trustIcons[i % trustIcons.length],
-  label
-}));
+// Four fixed trust signals — paired icon + bold headline + grey sub.
+// Matches the Framer-inspired navy strip above the breadcrumb.
+const trustItems = [
+  { icon: 'house' as const, label: 'Government-Approved', sub: 'in 5 Jurisdictions' },
+  { icon: 'clock' as const, label: '18+ Years',           sub: 'delivering courses' },
+  { icon: 'star'  as const, label: '4.8/5 from 52 Google Reviews', sub: 'verified Apr 2026' },
+  { icon: 'pin'   as const, label: 'Australian',          sub: 'Locally Owned & Operated' }
+];
 
 // Breadcrumb items — reshape content-collection breadcrumb to the
 // component's Crumb shape (omit href on the final item).

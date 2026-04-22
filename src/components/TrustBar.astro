@@ -1,15 +1,19 @@
 ---
 // TrustBar — dark navy horizontal strip of credibility signals.
-// Sits above the breadcrumb, directly below the site header.
-// Each item: inline SVG icon (stroked gold) + stacked label/sub.
-// Kept zero-JS; icons are passed in via props as small symbolic names
-// ("check", "clock", "shield", "award") and rendered from a local map.
+// Two-line format per item: bold white label over smaller grey sub.
+// Gold-stroked inline SVG icon sits to the left of the text stack.
+// Zero JS. Icons come from a local name map; you can also pass a raw
+// SVG inner-markup string via `iconSvg` to override the built-in.
 
 export interface TrustItem {
-  /** One of the built-in icon names below. */
-  icon:  'check' | 'clock' | 'shield' | 'award' | 'star' | 'lock';
+  /** Built-in icon name. Ignored if `iconSvg` is supplied. */
+  icon?: 'check' | 'clock' | 'shield' | 'award' | 'star' | 'lock' | 'house' | 'pin';
+  /** Raw SVG inner markup (paths, circles, etc.) on a 24x24 viewBox. */
+  iconSvg?: string;
+  /** Bold top line — the headline signal. */
   label: string;
-  sub?:  string;
+  /** Lighter supporting line below the label. */
+  sub?: string;
 }
 
 export interface Props {
@@ -20,14 +24,22 @@ export interface Props {
 
 const { items, class: className = '' } = Astro.props;
 
-const ICONS: Record<TrustItem['icon'], string> = {
+const ICONS: Record<NonNullable<TrustItem['icon']>, string> = {
   check:  '<path d="M4 12l5 5 11-11"/>',
   clock:  '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
   shield: '<path d="M12 3l8 3v6c0 4.5-3.5 8-8 9-4.5-1-8-4.5-8-9V6l8-3z"/>',
   award:  '<circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/>',
   star:   '<path d="M12 3l2.6 5.8 6.4.6-4.8 4.4 1.4 6.2L12 17.3l-5.6 2.7 1.4-6.2L3 9.4l6.4-.6L12 3z"/>',
-  lock:   '<rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/>'
+  lock:   '<rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V8a4 4 0 1 1 8 0v3"/>',
+  house:  '<path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/>',
+  pin:    '<path d="M12 21s-7-7.5-7-12a7 7 0 1 1 14 0c0 4.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>'
 };
+
+function iconMarkup(item: TrustItem): string {
+  if (item.iconSvg) return item.iconSvg;
+  if (item.icon && ICONS[item.icon]) return ICONS[item.icon];
+  return '';
+}
 
 const classes = ['abe-trustbar', className].filter(Boolean).join(' ');
 ---
@@ -36,7 +48,19 @@ const classes = ['abe-trustbar', className].filter(Boolean).join(' ');
   <div class="abe-trustbar__inner">
     {items.map((t) => (
       <div class="abe-trustbar__item">
-        <svg class="abe-trustbar__icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={ICONS[t.icon]} />
+        <svg
+          class="abe-trustbar__icon"
+          width="26"
+          height="26"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+          set:html={iconMarkup(t)}
+        />
         <span class="abe-trustbar__text">
           <span class="abe-trustbar__label">{t.label}</span>
           {t.sub && <span class="abe-trustbar__sub">{t.sub}</span>}
@@ -54,17 +78,18 @@ const classes = ['abe-trustbar', className].filter(Boolean).join(' ');
   .abe-trustbar__inner {
     max-width: var(--container-editorial);
     margin: 0 auto;
-    padding: var(--space-16) var(--space-24);
+    padding: 18px var(--space-24);
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    justify-content: space-around;
+    justify-content: space-between;
     gap: var(--space-24);
   }
   .abe-trustbar__item {
     display: inline-flex;
     align-items: center;
-    gap: var(--space-12);
+    gap: 14px;
+    min-width: 0;
   }
   .abe-trustbar__icon {
     color: var(--color-gold-safety);
@@ -74,25 +99,37 @@ const classes = ['abe-trustbar', className].filter(Boolean).join(' ');
     display: flex;
     flex-direction: column;
     gap: 2px;
-    line-height: 1.2;
+    line-height: 1.25;
+    min-width: 0;
   }
   .abe-trustbar__label {
     font-family: var(--font-heading);
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 15px;
+    font-weight: 700;
     letter-spacing: 0.1px;
     color: #ffffff;
   }
   .abe-trustbar__sub {
     font-family: var(--font-body);
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 400;
-    color: rgba(255, 255, 255, 0.65);
+    color: rgba(255, 255, 255, 0.58);
+    letter-spacing: 0.05px;
   }
-  @media (max-width: 640px) {
+  @media (max-width: 900px) {
     .abe-trustbar__inner {
       justify-content: flex-start;
-      gap: var(--space-16);
+      gap: 20px 28px;
     }
+    .abe-trustbar__item {
+      flex: 1 1 44%;
+    }
+  }
+  @media (max-width: 560px) {
+    .abe-trustbar__item {
+      flex: 1 1 100%;
+    }
+    .abe-trustbar__label { font-size: 14px; }
+    .abe-trustbar__sub { font-size: 12px; }
   }
 </style>
