@@ -1,0 +1,24 @@
+paths:
+  static: public
+  uploads: public/uploads
+timezone: Australia/Sydney
+markdown:
+  engine: commonmark
+  options:
+    gfm: true
+collections_config:
+  pages:
+    path: src/pages
+    icon: wysiwyg
+  source:
+    path: ''
+    icon: package_2
+  content:
+    path: src/content
+    icon: wysiwyg
+  content_pages:
+    path: src/content/pages
+    icon: contact_page
+  src:
+    path: src
+    icon: abc
